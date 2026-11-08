@@ -5,6 +5,9 @@ import { AuthForm, Card, StyledLink } from "./styles";
 import RegisterInputs from "../../../components/registerFormInputs";
 import RegisterLinks from "../../../components/registerLinks";
 import { useForm } from "react-hook-form";
+import axios from "axios";
+import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
 export interface SignUpFormValues {
   username: string;
@@ -13,13 +16,42 @@ export interface SignUpFormValues {
   password: string;
 }
 
+type ApiError = {
+  message: string;
+  code: number;
+};
+
 export default function SignUp() {
-  const { register, handleSubmit, reset } = useForm<SignUpFormValues>();
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm<SignUpFormValues>();
 
-  function submit(data: SignUpFormValues) {
-    console.log(data);
+  const navigate = useNavigate();
 
-    reset();
+  async function submit(data: SignUpFormValues) {
+    try {
+      await axios.post<SignUpFormValues>(
+        "http://localhost:3333/auth/register",
+        data,
+      );
+
+      toast.success("New user was successfully created!");
+      reset();
+      navigate("/");
+    } catch (err) {
+      if (axios.isAxiosError<ApiError>(err)) {
+        toast.error(`Failed to create user: ${err.response?.data.message}`);
+        console.error("Failed to create user: ", err.response?.data.message);
+        console.error("Response status: ", err.response?.status);
+      } else {
+        throw err;
+      }
+    }
+
+    // temporary pass: 1483-1475Rafmik!
   }
 
   return (
@@ -32,7 +64,7 @@ export default function SignUp() {
           </div>
 
           <Flex vertical gap={26}>
-            <RegisterInputs register={register} />
+            <RegisterInputs register={register} errors={errors} />
             <RegisterLinks />
             <Button type="primary" htmlType="submit">
               Sign up
