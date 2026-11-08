@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 export const MainContainer = styled.main`
-  font-size: 1.6rem;
+  font-size: 1rem;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -10,7 +10,10 @@ export const MainContainer = styled.main`
 `;
 
 export const AuthContainer = styled.section`
-  margin-top: 8.1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.9375rem; // 15px
+  margin-top: 5.0625rem; // 81px
 `;
 
 export const borderColor = "rgba(219, 219, 219, 1)";

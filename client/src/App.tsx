@@ -4,7 +4,7 @@ import Explore from "./pages/interest";
 import Applayout from "./pages/home";
 import Auth from "./pages/auth";
 import Login from "./pages/auth/login";
-import SignUp from "./pages/auth/signup";
+import SignUp from "./pages/auth/register";
 
 function App() {
   return (
@@ -15,7 +15,7 @@ function App() {
 
       <Route path="auth" element={<Auth />}>
         <Route path="login" element={<Login />} />
-        <Route path="signup" element={<SignUp />} />
+        <Route path="register" element={<SignUp />} />
       </Route>
     </Routes>
   );
