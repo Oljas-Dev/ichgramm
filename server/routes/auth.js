@@ -67,7 +67,7 @@ router.post("/register", async (req, res) => {
 
     const user = {
       username: username.trim(),
-      email: email.trim(),
+      email: email.trim().toLowerCase(),
       password: hashedPassword,
       fullname,
     };
@@ -88,6 +88,66 @@ router.post("/register", async (req, res) => {
 
     res.status(500).json({
       message: "Registration failed!",
+    });
+  }
+});
+
+router.post("/login", async (req, res) => {
+  const { identifier, password } = req.body;
+
+  const userIdentifier = await User.findOne({
+    $or: [
+      { username: identifier.trim() },
+      { email: identifier.trim().toLowerCase() },
+    ],
+  });
+
+  try {
+    // Validate input
+    if (!userIdentifier || !password) {
+      return res.status(400).json({
+        message: "Username and password are required",
+      });
+    }
+
+    // Find user
+    const user = await User.findOne({
+      $or: [
+        { username: identifier.trim() },
+        { email: identifier.trim().toLowerCase() },
+      ],
+    });
+
+    if (!user) {
+      return res.status(401).json({
+        message: "Invalid username or password",
+      });
+    }
+
+    // Compare passwords
+    const isValidPassword = await bcrypt.compare(password, user.password);
+
+    if (!isValidPassword) {
+      return res.status(401).json({
+        message: "Invalid username or password",
+      });
+    }
+
+    // Successfull login, generate jwt
+    const token = jwt.sign(
+      {
+        user: { id: user._id, username: user.username },
+      },
+      process.env.JWT_SECRET,
+      { expiresIn: "1h" },
+    );
+
+    res.status(200).json({ message: "Successfull login", token });
+  } catch (err) {
+    console.error("Login error:", err);
+
+    return res.status(500).json({
+      message: "Internal server error",
     });
   }
 });

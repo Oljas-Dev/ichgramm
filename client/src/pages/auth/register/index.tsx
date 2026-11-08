@@ -1,7 +1,7 @@
 import Logo from "../../../components/logo";
 import { AuthContainer } from "../../../styles/common";
 import { Button, Flex } from "antd";
-import { AuthForm, Card, StyledLink } from "./styles";
+import { AuthForm, Card, SmallText, StyledLink } from "./styles";
 import RegisterInputs from "../../../components/registerFormInputs";
 import RegisterLinks from "../../../components/registerLinks";
 import { useForm } from "react-hook-form";
@@ -16,7 +16,7 @@ export interface SignUpFormValues {
   password: string;
 }
 
-type ApiError = {
+export type ApiError = {
   message: string;
   code: number;
 };
@@ -73,10 +73,11 @@ export default function SignUp() {
         </AuthForm>
       </Card>
 
-      <Card $paddings="1.625rem 0">
-        <p>
-          Have an account? <StyledLink to="/auth/login">Log in</StyledLink>
-        </p>
+      <Card>
+        <Flex justify="center" gap={4}>
+          <SmallText>Have an account?</SmallText>
+          <StyledLink to="/auth/login">Log in</StyledLink>
+        </Flex>
       </Card>
     </AuthContainer>
   );

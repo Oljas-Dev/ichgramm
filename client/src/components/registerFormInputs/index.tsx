@@ -1,13 +1,7 @@
-import { Flex } from "antd";
 import Input from "../input";
 import type { FieldErrors, UseFormRegister } from "react-hook-form";
 import type { SignUpFormValues } from "../../pages/auth/register";
-import styled from "styled-components";
-
-const ErrorP = styled.p`
-  font-size: var(--font-size-xs);
-  color: rgba(255, 0, 20, 1);
-`;
+import { ErrorP, InputsContainer } from "../../styles/common";
 
 export default function RegisterInputs({
   register,
@@ -17,7 +11,7 @@ export default function RegisterInputs({
   errors: FieldErrors<SignUpFormValues>;
 }) {
   return (
-    <Flex vertical gap={6}>
+    <InputsContainer vertical gap={6}>
       <Input
         placeholder="Full Name"
         {...register("fullname", {
@@ -67,6 +61,6 @@ export default function RegisterInputs({
         })}
       />
       <ErrorP>{errors.password?.message}</ErrorP>
-    </Flex>
+    </InputsContainer>
   );
 }

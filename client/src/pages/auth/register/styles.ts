@@ -6,31 +6,25 @@ interface ButtonProps {
   $paddings?: string;
 }
 
-export const AuthForm = styled.form`
+interface AuthFormProps {
+  $gap?: string;
+}
+
+export const AuthForm = styled.form<AuthFormProps>`
   display: flex;
   flex-direction: column;
-  gap: 2.375rem; // 38px
+  gap: ${({ $gap = "2.375rem" }) => $gap}; // 38px
 
   h3 {
     font-size: 1rem;
     font-weight: 600;
   }
 
-  p,
-  a {
+  p {
     font-size: var(--font-size-xs);
   }
 
-  a {
-    color: rgba(0, 55, 107, 1);
-
-    &:hover {
-      color: purple;
-    }
-  }
-
   button {
-    // font-size: var();
     font-weight: 600;
   }
 `;
@@ -39,12 +33,16 @@ export const Card = styled.div<ButtonProps>`
   text-align: center;
   color: var(--gray-text);
   max-width: 21.875rem; // 350px
-  padding: ${({ $paddings = "1.875rem 2.625rem " }) => $paddings}; // 19px 42px
+  padding: ${({ $paddings = "1.875rem 2.625rem" }) => $paddings}; // 19px 42px
   border: 1px solid ${borderColor};
 `;
 
 export const StyledLink = styled(Link)`
-  color: rgba(0, 149, 246, 1);
-  font-size: var(--font-size-small);
+  color: rgba(0, 149, 246, 1) !important;
+  font-size: var(--font-size-small) !important;
   font-weight: 600;
+`;
+
+export const SmallText = styled.p`
+  font-size: var(--font-size-small) !important;
 `;
