@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 
 interface ButtonProps {
   $paddings?: string;
+  $color?: string;
 }
 
 interface AuthFormProps {
@@ -14,11 +15,7 @@ export const AuthForm = styled.form<AuthFormProps>`
   display: flex;
   flex-direction: column;
   gap: ${({ $gap = "2.375rem" }) => $gap}; // 38px
-
-  h3 {
-    font-size: 1rem;
-    font-weight: 600;
-  }
+  width: 100%;
 
   p {
     font-size: var(--font-size-xs);
@@ -31,10 +28,12 @@ export const AuthForm = styled.form<AuthFormProps>`
 
 export const Card = styled.div<ButtonProps>`
   text-align: center;
-  color: var(--gray-text);
+  color: ${({ $color = "var(--gray-text)" }) => $color};
   max-width: 21.875rem; // 350px
   padding: ${({ $paddings = "1.875rem 2.625rem" }) => $paddings}; // 19px 42px
   border: 1px solid ${borderColor};
+
+  position: relative;
 `;
 
 export const StyledLink = styled(Link)`

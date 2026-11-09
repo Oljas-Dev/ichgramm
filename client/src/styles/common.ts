@@ -8,6 +8,8 @@ export const MainContainer = styled.main`
   align-items: center;
   min-height: 100vh;
   margin-top: 5.0625rem; // 81px
+
+  position: relative;
 `;
 
 export const AuthContainer = styled.section`
@@ -35,11 +37,8 @@ export const ErrorP = styled.p`
   color: rgba(255, 0, 20, 1);
 `;
 
-export const Divider = styled.hr`
-  border: none;
-  border-top: 1px solid #ddd;
-  width: 100%;
-`;
-
 export const borderColor = "rgba(219, 219, 219, 1)";
 export const formTextColor = "rgba(115, 115, 115, 1)";
+export const TextCenter = styled.div`
+  text-align: center;
+`;

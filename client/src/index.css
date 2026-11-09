@@ -27,6 +27,11 @@ body {
   font-size: var(--font-size-base);
 }
 
+h3 {
+  font-size: 1rem;
+  font-weight: 600;
+}
+
 ul,
 ol {
   list-style: none;
@@ -34,4 +39,9 @@ ol {
 
 a {
   text-decoration: none;
+}
+
+button {
+  border: 0;
+  cursor: pointer;
 }
