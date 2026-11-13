@@ -14,6 +14,7 @@ export interface SignUpFormValues {
   email: string;
   fullname: string;
   password: string;
+  token?: string;
 }
 
 export type ApiError = {
@@ -33,12 +34,14 @@ export default function SignUp() {
 
   async function submit(data: SignUpFormValues) {
     try {
-      await axios.post<SignUpFormValues>(
+      const response = await axios.post<SignUpFormValues>(
         "http://localhost:3333/auth/register",
         data,
       );
+      if (!response.data?.token) return "Token was not created";
 
       toast.success("New user was successfully created!");
+      localStorage.setItem("token", response.data?.token);
       reset();
       navigate("/");
     } catch (err) {
@@ -50,8 +53,6 @@ export default function SignUp() {
         throw err;
       }
     }
-
-    // temporary pass: 1483-1475Rafmik!
   }
 
   return (

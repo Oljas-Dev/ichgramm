@@ -2,6 +2,15 @@ import { Flex } from "antd";
 import styled from "styled-components";
 
 export const MainContainer = styled.main`
+  display: grid;
+  grid-template-columns: 15.25rem 1fr;
+  max-width: 1440px;
+  width: 100%;
+  min-height: 85vh;
+  margin: 0 auto;
+`;
+
+export const AuthLayout = styled.main`
   font-size: 1rem;
   display: flex;
   flex-direction: column;

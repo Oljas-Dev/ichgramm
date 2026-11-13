@@ -33,6 +33,7 @@ export default function LoginForm() {
       );
 
       toast.success("You have successfully logged in!");
+      localStorage.setItem("token", response.data?.token);
       reset();
       navigate("/");
 

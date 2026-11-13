@@ -1,10 +1,10 @@
 import { Outlet } from "react-router-dom";
-import { MainContainer } from "../../styles/common";
+import { AuthLayout } from "../../styles/common";
 
 export default function Auth() {
   return (
-    <MainContainer>
+    <AuthLayout>
       <Outlet />
-    </MainContainer>
+    </AuthLayout>
   );
 }

@@ -1,8 +1,12 @@
 import express from "express";
 import cors from "cors";
-import authRouter from "./routes/auth.js";
-import { connectToDatabase } from "./db/config.js";
 import "dotenv/config";
+import { connectToDatabase } from "./db/config.js";
+
+import authRouter from "./routes/auth.js";
+import userRouter from "./routes/user.js";
+import postRouter from "./routes/post.js";
+import allPostsRouter from "./routes/allPosts.js";
 
 const app = express();
 const port = process.env.PORT || 3333;
@@ -21,7 +25,11 @@ app.get("/", (req, res) => {
   res.status(200).send("Server is running");
 });
 
+app.use("/uploads", express.static("uploads"));
 app.use("/auth", authRouter);
+app.use("/user", userRouter);
+app.use("/posts", postRouter);
+app.use("/posts", allPostsRouter);
 
 connectToDatabase()
   .then(() => {

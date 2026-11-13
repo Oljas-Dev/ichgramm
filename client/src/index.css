@@ -39,9 +39,20 @@ ol {
 
 a {
   text-decoration: none;
+  color: black;
 }
 
 button {
   border: 0;
   cursor: pointer;
+}
+
+.my-picker {
+  --epr-emoji-size: 20px;
+  --epr-preview-emoji-size: 20px;
+  --epr-preview-height: 50px;
+}
+
+.my-picker button {
+  grid-column: 1 !important;
 }

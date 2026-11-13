@@ -80,9 +80,13 @@ router.post("/register", async (req, res) => {
     // };
     await User.create(user);
 
-    res.status(201).json({
-      message: "User successfully registered!",
-    });
+    const token = jwt.sign(
+      { id: user._id, username: user.username },
+      process.env.JWT_SECRET,
+      { expiresIn: "2h" },
+    );
+
+    res.status(200).json({ message: "User was successfully created", token });
   } catch (err) {
     console.error("Registration error:", err);
 
@@ -135,11 +139,9 @@ router.post("/login", async (req, res) => {
 
     // Successfull login, generate jwt
     const token = jwt.sign(
-      {
-        user: { id: user._id, username: user.username },
-      },
+      { id: user._id, username: user.username },
       process.env.JWT_SECRET,
-      { expiresIn: "1h" },
+      { expiresIn: "2h" },
     );
 
     res.status(200).json({ message: "Successfull login", token });
