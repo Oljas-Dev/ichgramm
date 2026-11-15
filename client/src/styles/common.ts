@@ -8,6 +8,8 @@ export const MainContainer = styled.main`
   width: 100%;
   min-height: 85vh;
   margin: 0 auto;
+
+  position: relative;
 `;
 
 export const AuthLayout = styled.main`

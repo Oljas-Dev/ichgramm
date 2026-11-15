@@ -5,6 +5,7 @@ import { fetchAllPosts } from "../../../redux/slices/postsLoader";
 import { useAppDispatch, useAppSelector } from "../../../hooks/hooks";
 
 import UserPost from "../../../components/userPost";
+import ScrollEnd from "../../../components/scrollEnd";
 
 const PostsContainer = styled.section`
   display: grid;
@@ -28,12 +29,15 @@ export default function Homepage() {
   }, [dispatch]);
 
   return (
-    <PostsContainer>
-      {data.map((post, i) => {
-        return (
-          <UserPost post={post} i={i} key={post._id} myPost={post.isOwner} />
-        );
-      })}
-    </PostsContainer>
+    <>
+      <PostsContainer>
+        {data.map((post, i) => {
+          return (
+            <UserPost post={post} i={i} key={post._id} myPost={post.isOwner} />
+          );
+        })}
+      </PostsContainer>
+      <ScrollEnd />
+    </>
   );
 }

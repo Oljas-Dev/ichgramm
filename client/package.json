@@ -13,6 +13,7 @@
     "@reduxjs/toolkit": "^2.14.0",
     "antd": "^6.7.0",
     "axios": "^1.21.0",
+    "dayjs": "^1.11.23",
     "emoji-picker-react": "^5.1.4",
     "multer": "^2.5.0",
     "react": "^19.2.8",

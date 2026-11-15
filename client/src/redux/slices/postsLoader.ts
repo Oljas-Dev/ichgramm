@@ -10,6 +10,7 @@ export interface Post {
     _id: string;
     username: string;
     fullname: string;
+    createdAt: string;
   };
   isOwner: boolean;
 }

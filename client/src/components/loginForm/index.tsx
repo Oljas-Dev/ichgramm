@@ -14,6 +14,8 @@ import axios from "axios";
 import toast from "react-hot-toast";
 import type { ApiError } from "../../pages/auth/register";
 import FormDivider from "../divider/FormDivider";
+import { getUser, setToken } from "../../redux/slices/getUserSlice";
+import { useAppDispatch } from "../../hooks/hooks";
 
 export default function LoginForm() {
   const {
@@ -22,6 +24,7 @@ export default function LoginForm() {
     reset,
     formState: { errors },
   } = useForm<LoginFormValues>();
+  const dispatch = useAppDispatch();
 
   const navigate = useNavigate();
 
@@ -32,8 +35,13 @@ export default function LoginForm() {
         data,
       );
 
+      const token = response.data.token;
+
+      dispatch(setToken(token));
+
+      await dispatch(getUser(token));
+
       toast.success("You have successfully logged in!");
-      localStorage.setItem("token", response.data?.token);
       reset();
       navigate("/");
 

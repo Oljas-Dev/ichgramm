@@ -9,11 +9,31 @@ import ForgotPassword from "./pages/auth/forgot-password";
 import CreatePost from "./pages/home/create-post";
 import Homepage from "./pages/home/homepage";
 import ProfilePage from "./pages/profile";
+import ProtectedRoute from "./pages/auth/protectedRoute";
+import { useAppDispatch, useAppSelector } from "./hooks/hooks";
+import { useEffect } from "react";
+import { getUser } from "./redux/slices/getUserSlice";
 
 function App() {
+  const token = useAppSelector((state) => state.user.token);
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    if (token) {
+      dispatch(getUser(token));
+    }
+  }, [token, dispatch]);
+
   return (
     <Routes>
-      <Route path="/" element={<Applayout />}>
+      <Route
+        path="/"
+        element={
+          <ProtectedRoute>
+            <Applayout />
+          </ProtectedRoute>
+        }
+      >
         <Route index element={<Homepage />} />
         <Route path="interest" element={<Explore />} />
         <Route path="create-post" element={<CreatePost />} />

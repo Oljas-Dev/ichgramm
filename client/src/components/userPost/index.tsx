@@ -1,10 +1,15 @@
 import { Flex } from "antd";
 import styled from "styled-components";
+import dayjs from "dayjs";
+import relativeTime from "dayjs/plugin/relativeTime";
+
 import type { Post } from "../../redux/slices/postsLoader";
 import ProfileRow from "../profileRow";
 
 import heartImg from "./../../assets/heart.svg";
 import commentImg from "./../../assets/comment.svg";
+
+dayjs.extend(relativeTime);
 
 const UserPostContainer = styled.div`
   max-height: fit-content;
@@ -49,7 +54,11 @@ export default function UserPost({
   return (
     <UserPostContainer>
       <Flex vertical gap={8}>
-        <ProfileRow name={post.user.username} follow={!myPost} />
+        <ProfileRow
+          name={post.user.username}
+          follow={!myPost}
+          createdAt={post.user.createdAt}
+        />
         <PostImage
           src={`http://localhost:3333${post.image}`}
           alt={`post-${i}`}

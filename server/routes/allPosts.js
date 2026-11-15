@@ -12,7 +12,7 @@ router.get("/all", authenticateJWT, async (req, res) => {
 
     await Post.populate(allPosts, {
       path: "user",
-      select: "username fullname",
+      select: "username fullname createdAt",
     });
 
     const postWithOwnership = allPosts.map((post) => ({

@@ -1,4 +1,8 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import {
+  createAsyncThunk,
+  createSlice,
+  type PayloadAction,
+} from "@reduxjs/toolkit";
 import axios from "axios";
 
 interface User {
@@ -6,35 +10,36 @@ interface User {
   fullname: string;
   avatar?: string;
   friends?: string[];
+  createdAt?: string;
   id: string;
 }
 
 interface UserState {
-  data: User;
+  data: User | null;
+  token: string | null;
   status: "idle" | "loading" | "succeeded" | "failed";
   error: string | null;
 }
 
+const savedToken = localStorage.getItem("token");
+
 const initialState: UserState = {
-  data: {
-    username: "",
-    fullname: "",
-    id: "",
-  },
-  status: "idle",
+  data: null,
+  token: savedToken,
+  status: savedToken ? "loading" : "idle",
   error: null,
 };
 
 export const getUser = createAsyncThunk<User, string, { rejectValue: string }>(
-  "loader/getUser",
-  async (payload, thunkApi) => {
+  "auth/user",
+  async (token, thunkApi) => {
     try {
-      const response = await axios.get(
-        `http://localhost:3333/user/${payload}`,
+      const response = await axios.get<User>(
+        `http://localhost:3333/user/current`,
         {
           method: "GET",
           headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
+            Authorization: `Bearer ${token}`,
           },
         },
       );
@@ -51,10 +56,22 @@ export const getUser = createAsyncThunk<User, string, { rejectValue: string }>(
   },
 );
 
-const userReducer = createSlice({
-  name: "getUser",
+const authSlice = createSlice({
+  name: "user",
   initialState,
-  reducers: {},
+  reducers: {
+    setToken: (state, action: PayloadAction<string>) => {
+      state.token = action.payload;
+      localStorage.setItem("token", action.payload);
+    },
+
+    logout: (state) => {
+      state.data = null;
+      state.token = null;
+      state.status = "idle";
+      localStorage.removeItem("token");
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(getUser.pending, (state) => {
@@ -69,36 +86,18 @@ const userReducer = createSlice({
       .addCase(getUser.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.payload ?? action.error.message ?? "Unknown error";
+
+        if (
+          action.payload === "Unauthorized" ||
+          action.payload === "Invalid or expired token"
+        ) {
+          state.token = null;
+          state.data = null;
+          localStorage.removeItem("token");
+        }
       });
   },
 });
 
-export default userReducer.reducer;
-
-//     username: {
-//       type: String,
-//       required: true,
-//       unique: true,
-//       trim: true,
-//     },
-//     email: {
-//       type: String,
-//       required: true,
-//       unique: true,
-//       trim: true,
-//       lowercase: true,
-//     },
-//     fullname: {
-//       type: String,
-//       required: true,
-//       trim: true,
-//     },
-//     password: {
-//       type: String,
-//       required: true,
-//     },
-//     avatar: {
-//       type: String,
-//       trim: true,
-//     },
-//   },
+export const { setToken, logout } = authSlice.actions;
+export default authSlice.reducer;
