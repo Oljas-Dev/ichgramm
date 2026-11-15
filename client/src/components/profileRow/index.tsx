@@ -1,10 +1,7 @@
 import { Button, Flex } from "antd";
 import styled from "styled-components";
 import { getMemberDuration } from "../../helpers/getMemberDuration";
-
-interface ProfileProps {
-  $profile?: boolean;
-}
+import { PicturePlaceholder, type ProfileProps } from "../../styles/common";
 
 const ProfileRowContainer = styled.div<ProfileProps>`
   display: flex;
@@ -21,20 +18,6 @@ const ProfileRowContainer = styled.div<ProfileProps>`
   &:hover {
     background-color: ${({ $profile }) => $profile && "var(--gray-border)"};
   }
-`;
-
-const PicturePlaceholder = styled.div<ProfileProps>`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 1.75rem;
-  height: 1.75rem;
-  background: gray;
-  font-size: var(--font-size-xs);
-  color: var(--gray-border);
-  border-radius: 50%;
-
-  border: ${({ $profile }) => $profile && "1px solid rgba(0, 0, 0, 0.098)"};
 `;
 
 const UserSinceP = styled.p`
@@ -79,10 +62,10 @@ export default function ProfileRow({
         )}
         <Flex gap={8}>
           <p>{name}</p>
-          <UserSinceP>• {memberSince} •</UserSinceP>
+          {createdAt && <UserSinceP>• {memberSince} •</UserSinceP>}
         </Flex>
 
-        {!follow && <Button type="link">follow</Button>}
+        {follow && <Button type="link">follow</Button>}
       </ProfileRowContainer>
     );
   }

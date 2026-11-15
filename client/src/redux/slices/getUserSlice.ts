@@ -5,7 +5,7 @@ import {
 } from "@reduxjs/toolkit";
 import axios from "axios";
 
-interface User {
+export interface User {
   username: string;
   fullname: string;
   avatar?: string;
