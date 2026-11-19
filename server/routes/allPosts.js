@@ -5,7 +5,7 @@ import Post from "./../models/Post.js";
 const router = express.Router();
 
 router.get("/all", authenticateJWT, async (req, res) => {
-  const currentUserId = req.user.id;
+  const currentUserId = req.user.id.toString();
 
   try {
     const allPosts = await Post.aggregate([{ $sample: { size: 1000 } }]);

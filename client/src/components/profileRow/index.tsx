@@ -32,12 +32,14 @@ export default function ProfileRow({
   createdAt,
 }: {
   img?: string;
-  name: string;
+  name: string | undefined;
   follow?: boolean;
   menuRow?: boolean;
-  createdAt: string;
+  createdAt?: string;
 }) {
   const memberSince = getMemberDuration(createdAt);
+
+  if (!name) return <p>Did not find user's name</p>;
 
   if (menuRow) {
     return (

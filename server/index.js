@@ -7,6 +7,7 @@ import authRouter from "./routes/auth.js";
 import userRouter from "./routes/user.js";
 import postRouter from "./routes/post.js";
 import allPostsRouter from "./routes/allPosts.js";
+import postById from "./routes/postById.js";
 
 const app = express();
 const port = process.env.PORT || 3333;
@@ -30,6 +31,7 @@ app.use("/auth", authRouter);
 app.use("/user", userRouter);
 app.use("/posts", postRouter);
 app.use("/posts", allPostsRouter);
+app.use("/posts", postById);
 
 connectToDatabase()
   .then(() => {

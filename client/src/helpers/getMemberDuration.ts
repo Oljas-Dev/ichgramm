@@ -1,6 +1,6 @@
 import dayjs from "dayjs";
 
-export function getMemberDuration(createdAt: string) {
+export function getMemberDuration(createdAt: string | undefined) {
   const registrationDate = dayjs(createdAt);
   const now = dayjs();
 

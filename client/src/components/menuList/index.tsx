@@ -12,36 +12,43 @@ export default function MenuList() {
       icon: home,
       title: "Home",
       link: "/",
+      modal: false,
     },
     {
       icon: search,
       title: "Search",
       link: "#",
+      modal: false,
     },
     {
       icon: explore,
       title: "Explore",
       link: "#",
+      modal: false,
     },
     {
       icon: message,
       title: "Messages",
       link: "#",
+      modal: false,
     },
     {
       icon: heart,
       title: "Notifications",
       link: "#",
+      modal: false,
     },
     {
       icon: create,
       title: "Create",
-      link: "/create-post",
+      link: "#",
+      modal: true,
     },
     {
       icon: "",
       title: "Profile",
       link: "/profile",
+      modal: false,
     },
   ];
 
@@ -53,6 +60,7 @@ export default function MenuList() {
             icon={item.icon}
             title={item.title}
             link={item.link}
+            modal={item.modal}
             key={item.title}
           />
         );

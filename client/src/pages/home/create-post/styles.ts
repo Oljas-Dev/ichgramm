@@ -2,13 +2,10 @@ import { Flex } from "antd";
 import styled from "styled-components";
 
 export const CreatePostContainer = styled.article`
-  background-color: rgba(0, 0, 0, 0.65);
   width: 100%;
-  height: 100%;
 
   display: flex;
   justify-content: center;
-  align-items: center;
 
   button {
     grid-column: 3;
@@ -74,10 +71,14 @@ export const StyledTextarea = styled.textarea`
   resize: vertical;
 `;
 
-export const CharacterCounter = styled.span`
+interface CounterProps {
+  $right?: string;
+  $bottom?: string;
+}
+export const CharacterCounter = styled.span<CounterProps>`
   position: absolute;
-  right: 12px;
-  bottom: 10px;
+  right: ${({ $right }) => $right || "12px"};
+  bottom: ${({ $bottom }) => $bottom || "10px"};
   font-size: 0.75rem;
   color: #888;
 `;

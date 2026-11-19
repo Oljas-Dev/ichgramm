@@ -1,4 +1,5 @@
 import { Button, Flex } from "antd";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
 const UsernameRow = styled(Flex)`
@@ -9,10 +10,13 @@ export default function ProfileUsernameRow({
 }: {
   username: string | undefined;
 }) {
+  const navigate = useNavigate();
   return (
     <UsernameRow gap={23} align="center">
       <p>{username}</p>
-      <Button variant="filled">Edit profile</Button>
+      <Button variant="filled" onClick={() => navigate("/profile/edit")}>
+        Edit profile
+      </Button>
     </UsernameRow>
   );
 }

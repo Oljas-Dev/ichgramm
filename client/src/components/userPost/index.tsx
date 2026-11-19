@@ -5,9 +5,7 @@ import relativeTime from "dayjs/plugin/relativeTime";
 
 import type { Post } from "../../redux/slices/postsLoader";
 import ProfileRow from "../profileRow";
-
-import heartImg from "./../../assets/heart.svg";
-import commentImg from "./../../assets/comment.svg";
+import LikesGroup from "../likesGroup";
 
 dayjs.extend(relativeTime);
 
@@ -22,10 +20,6 @@ const PostImage = styled.img`
   height: 503px;
   object-fit: cover;
   object-position: center;
-`;
-
-const LikesContainer = styled(Flex)`
-  padding-top: 0.625rem;
 `;
 
 const SmallBoldText = styled.h5`
@@ -65,17 +59,7 @@ export default function UserPost({
         />
       </Flex>
 
-      <LikesContainer vertical gap={11}>
-        <Flex gap={14}>
-          <button>
-            <img src={heartImg} alt="heart icon" />
-          </button>
-
-          <button>
-            <img src={commentImg} alt="comment icon" />
-          </button>
-        </Flex>
-      </LikesContainer>
+      <LikesGroup />
 
       {post?.likes && <SmallBoldText>{post.likes} likes</SmallBoldText>}
 

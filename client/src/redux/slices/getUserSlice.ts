@@ -11,7 +11,7 @@ export interface User {
   avatar?: string;
   friends?: string[];
   createdAt?: string;
-  id: string;
+  _id: string;
 }
 
 interface UserState {

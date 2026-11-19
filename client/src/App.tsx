@@ -13,6 +13,8 @@ import ProtectedRoute from "./pages/auth/protectedRoute";
 import { useAppDispatch, useAppSelector } from "./hooks/hooks";
 import { useEffect } from "react";
 import { getUser } from "./redux/slices/getUserSlice";
+import PostPage from "./pages/post";
+import EditProfile from "./pages/profile/edit";
 
 function App() {
   const token = useAppSelector((state) => state.user.token);
@@ -38,6 +40,8 @@ function App() {
         <Route path="interest" element={<Explore />} />
         <Route path="create-post" element={<CreatePost />} />
         <Route path="profile" element={<ProfilePage />} />
+        <Route path="profile/edit" element={<EditProfile />} />
+        <Route path="post/:postId" element={<PostPage />} />
       </Route>
 
       <Route path="auth" element={<Auth />}>

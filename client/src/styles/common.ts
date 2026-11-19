@@ -73,6 +73,35 @@ export const BoldP = styled.p`
 
 export const borderColor = "rgba(219, 219, 219, 1)";
 export const formTextColor = "rgba(115, 115, 115, 1)";
+export const TextGray = styled.p`
+  color: var(--gray-text);
+`;
+interface RelativeProps {
+  $styles?: string;
+}
+export const RelativePositionContainer = styled.div<RelativeProps>`
+  ${({ $styles }) => $styles}
+  position: relative;
+`;
 export const TextCenter = styled.div`
   text-align: center;
+`;
+
+interface BackdropProps {
+  $show: boolean;
+  $column?: string;
+}
+
+// Modal
+export const ModalBackdrop = styled.div<BackdropProps>`
+  display: ${({ $show }) => ($show ? "block" : "none")};
+  grid-column: ${({ $column }) => $column};
+  font-size: var(--font-size-xs);
+
+  background-color: rgba(0, 0, 0, 0.65);
+  padding: 2.9375rem 5.9375rem 0 6.25rem; // 47px 95px 0 100px;
+  position: absolute;
+  inset: 0;
+
+  z-index: 10;
 `;

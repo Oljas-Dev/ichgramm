@@ -13,7 +13,7 @@ router.post(
     try {
       const { description } = req.body;
 
-      console.log("Authenticated user:", req.user);
+      // console.log("Authenticated user:", req.user);
 
       // Check that an image was uploaded
       if (!req.file) {
