@@ -30,6 +30,8 @@ import type {
   SubmitHandler,
 } from "react-hook-form";
 import { ErrorP } from "../../styles/common";
+import { useAppDispatch } from "../../hooks/hooks";
+import { closeModal } from "../../redux/slices/modalSlice";
 
 interface AddPostFormProps {
   handleSubmit: UseFormHandleSubmit<CreatePostFormValues>;
@@ -53,6 +55,7 @@ export default function AddPostForm({
   const [showEmojii, setShowEmojii] = useState(false);
 
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
   const MAX_LENGTH = 1000;
   const description = watch("description") || "";
 
@@ -78,6 +81,7 @@ export default function AddPostForm({
       }
 
       toast.success("Post was created!");
+      dispatch(closeModal());
       navigate("/");
       reset();
     } catch (error) {

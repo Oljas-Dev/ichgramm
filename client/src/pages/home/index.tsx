@@ -1,3 +1,5 @@
+import type { MouseEvent } from "react";
+
 import { Outlet } from "react-router-dom";
 import { MainContainer, ModalBackdrop } from "../../styles/common";
 import LeftNavPanel from "../../components/leftNavPanel";
@@ -10,8 +12,10 @@ export default function Applayout() {
   const currentModal = useAppSelector((state) => state.modal.modal);
   const dispatch = useAppDispatch();
 
-  function close() {
-    dispatch(closeModal());
+  function close(e: MouseEvent<HTMLDivElement>) {
+    if (e.target === e.currentTarget) {
+      dispatch(closeModal());
+    }
   }
 
   return (

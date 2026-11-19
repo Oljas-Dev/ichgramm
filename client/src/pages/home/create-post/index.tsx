@@ -10,6 +10,7 @@ export interface CreatePostFormValues {
 }
 
 export default function CreatePost() {
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const {
     register,
     handleSubmit,
@@ -18,8 +19,6 @@ export default function CreatePost() {
     setValue,
     formState: { errors },
   } = useForm<CreatePostFormValues>();
-
-  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const showModal = () => {
     setIsModalOpen(true);
