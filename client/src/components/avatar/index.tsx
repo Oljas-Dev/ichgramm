@@ -1,4 +1,4 @@
-import type { User } from "../../redux/slices/getUserSlice";
+import type { User } from "../../redux/slices/authSlice";
 import { PicturePlaceholder } from "../../styles/common";
 
 export default function Avatar({

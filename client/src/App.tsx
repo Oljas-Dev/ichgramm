@@ -12,8 +12,7 @@ import ProfilePage from "./pages/profile";
 import ProtectedRoute from "./pages/auth/protectedRoute";
 import { useAppDispatch, useAppSelector } from "./hooks/hooks";
 import { useEffect } from "react";
-import { getUser } from "./redux/slices/getUserSlice";
-import PostPage from "./pages/post";
+import { getUser } from "./redux/slices/authSlice";
 import EditProfile from "./pages/profile/edit";
 
 function App() {
@@ -39,9 +38,8 @@ function App() {
         <Route index element={<Homepage />} />
         <Route path="interest" element={<Explore />} />
         <Route path="create-post" element={<CreatePost />} />
-        <Route path="profile" element={<ProfilePage />} />
+        <Route path="profile/:userId" element={<ProfilePage />} />
         <Route path="profile/edit" element={<EditProfile />} />
-        <Route path="post/:postId" element={<PostPage />} />
       </Route>
 
       <Route path="auth" element={<Auth />}>

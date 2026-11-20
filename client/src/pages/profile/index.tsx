@@ -1,8 +1,7 @@
-import { useAppSelector } from "../../hooks/hooks";
+import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
 import { Flex } from "antd";
-import { Link } from "react-router-dom";
-import { useState, type MouseEvent } from "react";
-import axios from "axios";
+import { Link, useParams } from "react-router-dom";
+import { useEffect, useState, type MouseEvent } from "react";
 
 import Avatar from "../../components/avatar";
 import ProfileUserState from "../../components/profileUserState";
@@ -19,13 +18,19 @@ import {
 } from "./styles";
 import CurrentPost from "../../components/currentPost";
 import { ModalBackdrop } from "../../styles/common";
+import type { currentPostType } from "../../types/projectTypes";
+import {
+  fetchPostById,
+  fetchProfilePage,
+} from "../../redux/slices/postsLoader";
 
 export default function ProfilePage() {
   const [openPost, setOpenPost] = useState(false);
-  const [currentPost, setCurrentPost] = useState({});
+  const { userId } = useParams();
 
+  const dispatch = useAppDispatch();
   const data = useAppSelector((state) => state.user.data);
-  const pictures = useAppSelector((state) => state.postsLoader.data);
+  const pictures = useAppSelector((state) => state.postsLoader.currentPost);
 
   const state = {
     posts: "123",
@@ -33,10 +38,8 @@ export default function ProfilePage() {
     following: "59",
   };
 
-  async function getPostById(id: string) {
-    const response = await axios.get(`http://localhost:3333/posts/${id}`);
-
-    setCurrentPost(response.data.post);
+  function handlePost(id: string | undefined) {
+    dispatch(fetchPostById(id));
     setOpenPost(true);
   }
 
@@ -46,11 +49,21 @@ export default function ProfilePage() {
     }
   }
 
+  useEffect(() => {
+    if (!userId) return;
+
+    async function fetchPosts() {
+      dispatch(fetchProfilePage(userId));
+    }
+
+    fetchPosts();
+  }, [userId, dispatch]);
+
   return (
     <ProfilePageContainer>
       {openPost && (
         <ModalBackdrop $show={openPost} onClick={(e) => closeModal(e)}>
-          <CurrentPost currentPost={currentPost} />
+          <CurrentPost />
         </ModalBackdrop>
       )}
 
@@ -72,11 +85,11 @@ export default function ProfilePage() {
       </HeaderContainer>
 
       <PicturesContainer>
-        {pictures?.map((picture) => {
+        {pictures?.map((picture: currentPostType) => {
           return (
             <Link
               to="#"
-              onClick={() => getPostById(picture._id)}
+              onClick={() => handlePost(picture._id)}
               key={picture._id}
             >
               <ImageContainer

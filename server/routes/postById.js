@@ -1,12 +1,11 @@
 import express from "express";
 import Post from "../models/Post.js";
+import Comment from "../models/Comment.js";
 
 const router = express.Router();
 
 router.get("/:postId", async (req, res) => {
   const { postId } = req.params;
-
-  console.log(postId);
 
   try {
     if (!postId) {
@@ -15,16 +14,26 @@ router.get("/:postId", async (req, res) => {
       });
     }
 
-    const post = await Post.findById(postId);
+    const post = await Post.findById(postId).populate(
+      "user",
+      "username avatar fullname",
+    );
 
-    await Post.populate(post, {
-      path: "user",
-      select: "username avatar fullname",
-    });
+    const comments = await Comment.find({ postId })
+      .populate({
+        path: "commentBy",
+        select: "username fullname avatar",
+      })
+      .sort({ createdAt: -1 });
+
+    const postWithComments = {
+      ...post.toObject(),
+      comments,
+    };
 
     return res.status(200).json({
       message: "Post successfully found",
-      post,
+      post: postWithComments,
     });
   } catch (err) {
     console.error("Did not find your post:", err);

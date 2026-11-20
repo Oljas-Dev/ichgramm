@@ -1,5 +1,7 @@
 import { Link } from "react-router-dom";
 import styled from "styled-components";
+import { useAppDispatch } from "../../hooks/hooks";
+import { setModal } from "../../redux/slices/modalSlice";
 
 const FooterContainer = styled.footer`
   grid-column: span 2;
@@ -31,9 +33,15 @@ const StyledList = styled.ul`
       color: black;
     }
   }
+
+  li {
+    cursor: pointer;
+  }
 `;
 
 export default function Footer() {
+  const dispatch = useAppDispatch();
+
   return (
     <FooterContainer>
       <StyledList>
@@ -52,9 +60,7 @@ export default function Footer() {
         <li>
           <Link to="#">Notifications</Link>
         </li>
-        <li>
-          <Link to="create-post">Create</Link>
-        </li>
+        <li onClick={() => dispatch(setModal("Create"))}>Create</li>
       </StyledList>
       <p>© 2024 ICHgram</p>
     </FooterContainer>

@@ -1,30 +1,37 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
+import type { User } from "./authSlice";
+import type { currentPostType } from "../../types/projectTypes";
 export interface Post {
   _id: string;
   description: string;
-  publishedDate: string;
   image: string;
   likes?: number;
-  user: {
-    _id: string;
-    username: string;
-    fullname: string;
-    createdAt: string;
-  };
+  user: User;
   isOwner: boolean;
 }
 
 interface PostsState {
   data: Post[];
-  post: Post[];
+  currentPost: currentPostType[];
+  postById: currentPostType;
   status: "idle" | "loading" | "succeeded" | "failed";
   error: string | null;
 }
 
 const initialState: PostsState = {
   data: [],
-  post: [],
+  currentPost: [],
+  postById: {
+    description: "",
+    image: "",
+    likes: 0,
+    comments: [],
+    createdAt: "",
+    updatedAt: "",
+    user: null,
+    _id: "",
+  },
   status: "idle",
   error: null,
 };
@@ -53,6 +60,46 @@ export const fetchAllPosts = createAsyncThunk<
   }
 });
 
+export const fetchProfilePage = createAsyncThunk<
+  currentPostType[],
+  string | undefined,
+  { rejectValue: string }
+>("loader/fetchProfilePage", async (payload, thunkApi) => {
+  try {
+    const response = await axios.get(
+      `http://localhost:3333/profilePage/${payload}`,
+    );
+
+    return response.data.myPosts;
+  } catch (err) {
+    if (axios.isAxiosError(err)) {
+      return thunkApi.rejectWithValue(
+        err.response?.data?.message || err.message,
+      );
+    }
+    return thunkApi.rejectWithValue("Something went wrong");
+  }
+});
+
+export const fetchPostById = createAsyncThunk<
+  currentPostType,
+  string | undefined,
+  { rejectValue: string }
+>("loader/postById", async (payload, thunkApi) => {
+  try {
+    const response = await axios.get(`http://localhost:3333/posts/${payload}`);
+
+    return response.data.post;
+  } catch (err) {
+    if (axios.isAxiosError(err)) {
+      return thunkApi.rejectWithValue(
+        err.response?.data?.message || err.message,
+      );
+    }
+    return thunkApi.rejectWithValue("Something went wrong");
+  }
+});
+
 const postsReducer = createSlice({
   name: "postsLoader",
   initialState,
@@ -69,6 +116,32 @@ const postsReducer = createSlice({
         state.error = null;
       })
       .addCase(fetchAllPosts.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.payload ?? action.error.message ?? "Unknown error";
+      })
+      .addCase(fetchProfilePage.pending, (state) => {
+        state.status = "loading";
+        state.error = null;
+      })
+      .addCase(fetchProfilePage.fulfilled, (state, action) => {
+        state.currentPost = action.payload;
+        state.status = "succeeded";
+        state.error = null;
+      })
+      .addCase(fetchProfilePage.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.payload ?? action.error.message ?? "Unknown error";
+      })
+      .addCase(fetchPostById.pending, (state) => {
+        state.status = "loading";
+        state.error = null;
+      })
+      .addCase(fetchPostById.fulfilled, (state, action) => {
+        state.postById = action.payload;
+        state.status = "succeeded";
+        state.error = null;
+      })
+      .addCase(fetchPostById.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.payload ?? action.error.message ?? "Unknown error";
       });

@@ -1,6 +1,6 @@
 import { configureStore } from "@reduxjs/toolkit";
 import postsReducer from "./slices/postsLoader";
-import authReducer from "./slices/getUserSlice";
+import authReducer from "./slices/authSlice";
 import modalReducer from "./slices/modalSlice";
 
 const store = configureStore({

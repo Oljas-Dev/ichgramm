@@ -14,7 +14,7 @@ import axios from "axios";
 import toast from "react-hot-toast";
 import type { ApiError } from "../../pages/auth/register";
 import FormDivider from "../divider/FormDivider";
-import { getUser, setToken } from "../../redux/slices/getUserSlice";
+import { getUser, setToken } from "../../redux/slices/authSlice";
 import { useAppDispatch } from "../../hooks/hooks";
 
 export default function LoginForm() {

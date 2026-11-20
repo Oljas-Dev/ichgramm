@@ -17,7 +17,7 @@ router.get("/current", authenticateJWT, async (req, res) => {
       username: user.username,
       avatar: "",
       createdAt: user.createdAt,
-      id: user._id,
+      _id: user._id,
     };
 
     return res.status(200).json(currentUser);

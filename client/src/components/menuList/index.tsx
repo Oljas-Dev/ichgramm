@@ -5,8 +5,11 @@ import message from "./../../assets/menu_icons/message.svg";
 import heart from "./../../assets/menu_icons/heart.svg";
 import create from "./../../assets/menu_icons/create.svg";
 import MenuRow from "../menuRow";
+import { useAppSelector } from "../../hooks/hooks";
 
 export default function MenuList() {
+  const userId = useAppSelector((state) => state.user.data?._id);
+
   const menu = [
     {
       icon: home,
@@ -47,7 +50,7 @@ export default function MenuList() {
     {
       icon: "",
       title: "Profile",
-      link: "/profile",
+      link: `/profile/${userId}`,
       modal: false,
     },
   ];

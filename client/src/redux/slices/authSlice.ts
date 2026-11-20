@@ -1,49 +1,111 @@
-import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
+import {
+  createAsyncThunk,
+  createSlice,
+  type PayloadAction,
+} from "@reduxjs/toolkit";
+import axios from "axios";
 
-export interface CurrentUser {
-  id: string;
+export interface User {
   username: string;
   fullname: string;
-  avatar: string;
-  createdAt: string;
+  avatar?: string;
+  friends?: string[];
+  createdAt?: string;
+  _id: string;
 }
 
-interface AuthState {
+interface UserState {
+  data: User | null;
   token: string | null;
-  user: CurrentUser | null;
-  status: "idle" | "loading" | "authenticated" | "unauthenticated";
+  user: User | null;
+  status: "idle" | "loading" | "succeeded" | "failed";
+  error: string | null;
 }
 
-const initialState: AuthState = {
-  token: localStorage.getItem("token"),
+const savedToken = localStorage.getItem("token");
+
+const initialState: UserState = {
+  data: null,
+  token: savedToken,
   user: null,
-  status: "idle",
+  status: savedToken ? "loading" : "idle",
+  error: null,
 };
 
+export const getUser = createAsyncThunk<User, string, { rejectValue: string }>(
+  "auth/user",
+  async (token, thunkApi) => {
+    try {
+      const response = await axios.get<User>(
+        `http://localhost:3333/user/current`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
+
+      setUser(response.data);
+
+      return response.data;
+    } catch (err) {
+      if (axios.isAxiosError(err)) {
+        return thunkApi.rejectWithValue(
+          err.response?.data?.message || err.message,
+        );
+      }
+      return thunkApi.rejectWithValue("Could not get user");
+    }
+  },
+);
+
 const authSlice = createSlice({
-  name: "auth",
+  name: "user",
   initialState,
   reducers: {
-    setCredentials: (
-      state,
-      action: PayloadAction<{ token: string; user: CurrentUser }>,
-    ) => {
-      state.token = action.payload.token;
-      state.user = action.payload.user;
-      state.status = "authenticated";
+    setToken: (state, action: PayloadAction<string>) => {
+      state.token = action.payload;
+      localStorage.setItem("token", action.payload);
+    },
 
-      localStorage.setItem("token", action.payload.token);
+    setUser: (state, action: PayloadAction<User>) => {
+      state.user = action.payload;
     },
 
     logout: (state) => {
+      state.data = null;
       state.token = null;
-      state.user = null;
-      state.status = "unauthenticated";
-
+      state.status = "idle";
       localStorage.removeItem("token");
     },
   },
+  extraReducers: (builder) => {
+    builder
+      .addCase(getUser.pending, (state) => {
+        state.status = "loading";
+        state.error = null;
+      })
+      .addCase(getUser.fulfilled, (state, action) => {
+        state.data = action.payload;
+        state.status = "succeeded";
+        state.error = null;
+      })
+      .addCase(getUser.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.payload ?? action.error.message ?? "Unknown error";
+
+        if (
+          action.payload === "Unauthorized" ||
+          action.payload === "Invalid or expired token"
+        ) {
+          state.token = null;
+          state.data = null;
+          localStorage.removeItem("token");
+        }
+      });
+  },
 });
 
-export const { setCredentials, logout } = authSlice.actions;
+export const { setToken, logout, setUser } = authSlice.actions;
 export default authSlice.reducer;

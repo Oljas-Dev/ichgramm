@@ -10,9 +10,14 @@ export const CurrentPostContainer = styled.div`
   z-index: 20;
 `;
 
+export const CurrentImageContainer = styled(Flex)`
+  height: 100%;
+  background-color: #000;
+`;
+
 export const CurrentPostImg = styled.img`
   width: 100%;
-  aspect-ratio: 1/1;
+  // aspect-ratio: 1/1;
   object-fit: top;
   object-position: center;
 `;

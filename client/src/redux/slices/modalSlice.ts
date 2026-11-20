@@ -1,11 +1,19 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 
+interface ModalObject {
+  open: boolean;
+  name: string;
+}
+
 interface ModalState {
-  modal: string;
+  modal: ModalObject;
 }
 
 const initialState: ModalState = {
-  modal: "",
+  modal: {
+    open: false,
+    name: "",
+  },
 };
 
 const modalSlice = createSlice({
@@ -13,11 +21,13 @@ const modalSlice = createSlice({
   initialState,
   reducers: {
     setModal: (state, action: PayloadAction<string>) => {
-      state.modal = action.payload;
+      state.modal.name = action.payload;
+      state.modal.open = true;
     },
 
     closeModal: (state) => {
-      state.modal = "";
+      state.modal.name = "";
+      state.modal.open = false;
     },
   },
 });
