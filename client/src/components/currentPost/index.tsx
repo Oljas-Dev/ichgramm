@@ -25,8 +25,6 @@ export default function CurrentPost() {
   const dispatch = useAppDispatch();
   const currentPost = useAppSelector((state) => state.postsLoader.postById);
 
-  // console.log(testPost);
-
   if (!currentPost) throw Error("Could not find this post");
 
   return (

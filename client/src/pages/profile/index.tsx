@@ -1,7 +1,7 @@
 import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
 import { Flex } from "antd";
 import { Link, useParams } from "react-router-dom";
-import { useEffect, useState, type MouseEvent } from "react";
+import { useEffect } from "react";
 
 import Avatar from "../../components/avatar";
 import ProfileUserState from "../../components/profileUserState";
@@ -16,21 +16,23 @@ import {
   PicturesContainer,
   ProfilePageContainer,
 } from "./styles";
-import CurrentPost from "../../components/currentPost";
-import { ModalBackdrop } from "../../styles/common";
 import type { currentPostType } from "../../types/projectTypes";
 import {
   fetchPostById,
   fetchProfilePage,
 } from "../../redux/slices/postsLoader";
+import { setModal } from "../../redux/slices/modalSlice";
 
 export default function ProfilePage() {
-  const [openPost, setOpenPost] = useState(false);
   const { userId } = useParams();
 
   const dispatch = useAppDispatch();
-  const data = useAppSelector((state) => state.user.data);
-  const pictures = useAppSelector((state) => state.postsLoader.currentPost);
+  const accumulatedData = useAppSelector(
+    (state) => state.postsLoader.accumulatedData,
+  );
+
+  const pictures = accumulatedData?.profilePosts;
+  const data = accumulatedData?.profileData;
 
   const state = {
     posts: "123",
@@ -40,13 +42,7 @@ export default function ProfilePage() {
 
   function handlePost(id: string | undefined) {
     dispatch(fetchPostById(id));
-    setOpenPost(true);
-  }
-
-  function closeModal(e: MouseEvent<HTMLDivElement>) {
-    if (e.target === e.currentTarget) {
-      setOpenPost(false);
-    }
+    dispatch(setModal("currentPost"));
   }
 
   useEffect(() => {
@@ -61,26 +57,19 @@ export default function ProfilePage() {
 
   return (
     <ProfilePageContainer>
-      {openPost && (
-        <ModalBackdrop $show={openPost} onClick={(e) => closeModal(e)}>
-          <CurrentPost />
-        </ModalBackdrop>
-      )}
-
       <HeaderContainer>
         <Avatar user={data} />
         <Flex vertical gap={19.5}>
           <ProfileUsernameRow username={data?.username} />
           <ProfileUserState data={state} />
-          <Description>
-            • Гарантия помощи с трудоустройством в ведущие IT-компании •
-            Выпускники зарабатывают от 45к евро БЕСПЛАТНАЯ
-          </Description>
+          {data?.about && <Description>{data?.about}</Description>}
 
-          <Flex gap={8}>
-            <img src={linkImg} alt="link image" />
-            <Link to="#">bit.ly/3rpiIbh</Link>
-          </Flex>
+          {data?.website && (
+            <Flex gap={8}>
+              <img src={linkImg} alt="link image" />
+              <Link to="#">{data?.website}</Link>
+            </Flex>
+          )}
         </Flex>
       </HeaderContainer>
 

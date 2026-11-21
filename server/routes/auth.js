@@ -72,18 +72,12 @@ router.post("/register", async (req, res) => {
       fullname,
     };
 
-    // const testUser = {
-    //   username: "Oljas",
-    //   email: "test@gamil.com",
-    //   password: "45636568",
-    //   fullname: "oljas medetbaev",
-    // };
     await User.create(user);
 
     const token = jwt.sign(
       { id: user._id, username: user.username },
       process.env.JWT_SECRET,
-      { expiresIn: "2h" },
+      { expiresIn: "5h" },
     );
 
     res.status(200).json({ message: "User was successfully created", token });

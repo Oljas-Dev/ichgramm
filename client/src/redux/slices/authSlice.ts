@@ -9,7 +9,8 @@ export interface User {
   username: string;
   fullname: string;
   avatar?: string;
-  friends?: string[];
+  website?: string;
+  about?: string;
   createdAt?: string;
   _id: string;
 }

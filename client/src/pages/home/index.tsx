@@ -8,6 +8,7 @@ import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
 import { closeModal } from "../../redux/slices/modalSlice";
 import CreatePost from "./create-post";
 import CurrentPostMenu from "../../components/currentPostMenu";
+import CurrentPost from "../../components/currentPost";
 
 export default function Applayout() {
   const currentModal = useAppSelector((state) => state.modal.modal);
@@ -27,7 +28,8 @@ export default function Applayout() {
 
       <ModalBackdrop $show={currentModal.open} $column="2" onClick={close}>
         {(currentModal.name === "Create" && <CreatePost />) ||
-          (currentModal.name === "postMenu" && <CurrentPostMenu />)}
+          (currentModal.name === "postMenu" && <CurrentPostMenu />) ||
+          (currentModal.name === "currentPost" && <CurrentPost />)}
       </ModalBackdrop>
     </MainContainer>
   );

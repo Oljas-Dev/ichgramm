@@ -15,7 +15,9 @@ router.get("/current", authenticateJWT, async (req, res) => {
     const currentUser = {
       fullname: user.fullname,
       username: user.username,
-      avatar: "",
+      website: user.website,
+      about: user.about,
+      avatar: null,
       createdAt: user.createdAt,
       _id: user._id,
     };

@@ -20,3 +20,11 @@ export interface currentPostType {
   user: User | null;
   _id?: string;
 }
+
+export type ModalTypes =
+  | "postMenu"
+  | "currentPost"
+  | "Create"
+  | "Search"
+  | "Notifications"
+  | "";

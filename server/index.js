@@ -10,6 +10,7 @@ import allPostsRouter from "./routes/allPosts.js";
 import postById from "./routes/postById.js";
 import profilePage from "./routes/profilePage.js";
 import comment from "./routes/comment.js";
+import updateUser from "./routes/updateUser.js";
 
 const app = express();
 const port = process.env.PORT || 3333;
@@ -36,6 +37,7 @@ app.use("/posts", allPostsRouter);
 app.use("/posts", postById);
 app.use("/profilePage", profilePage);
 app.use("/comment", comment);
+app.use("/update-user", updateUser);
 
 connectToDatabase()
   .then(() => {

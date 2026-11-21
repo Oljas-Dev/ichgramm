@@ -2,6 +2,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 import type { User } from "./authSlice";
 import type { currentPostType } from "../../types/projectTypes";
+import { fetchUrl } from "../../variables/commonVariables";
 export interface Post {
   _id: string;
   description: string;
@@ -11,8 +12,14 @@ export interface Post {
   isOwner: boolean;
 }
 
+interface accumulatedDataTypes {
+  profilePosts: currentPostType[];
+  profileData: User;
+}
+
 interface PostsState {
   data: Post[];
+  accumulatedData: accumulatedDataTypes | null;
   currentPost: currentPostType[];
   postById: currentPostType;
   status: "idle" | "loading" | "succeeded" | "failed";
@@ -22,6 +29,7 @@ interface PostsState {
 const initialState: PostsState = {
   data: [],
   currentPost: [],
+  accumulatedData: null,
   postById: {
     description: "",
     image: "",
@@ -42,7 +50,7 @@ export const fetchAllPosts = createAsyncThunk<
   { rejectValue: string }
 >("loader/fetchAllPosts", async (payload, thunkApi) => {
   try {
-    const response = await axios.get(`http://localhost:3333/${payload}/all`, {
+    const response = await axios.get(`${fetchUrl}/${payload}/all`, {
       method: "GET",
       headers: {
         Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -61,16 +69,14 @@ export const fetchAllPosts = createAsyncThunk<
 });
 
 export const fetchProfilePage = createAsyncThunk<
-  currentPostType[],
+  accumulatedDataTypes,
   string | undefined,
   { rejectValue: string }
 >("loader/fetchProfilePage", async (payload, thunkApi) => {
   try {
-    const response = await axios.get(
-      `http://localhost:3333/profilePage/${payload}`,
-    );
+    const response = await axios.get(`${fetchUrl}/profilePage/${payload}`);
 
-    return response.data.myPosts;
+    return response.data.accumulatedData;
   } catch (err) {
     if (axios.isAxiosError(err)) {
       return thunkApi.rejectWithValue(
@@ -87,7 +93,7 @@ export const fetchPostById = createAsyncThunk<
   { rejectValue: string }
 >("loader/postById", async (payload, thunkApi) => {
   try {
-    const response = await axios.get(`http://localhost:3333/posts/${payload}`);
+    const response = await axios.get(`${fetchUrl}/posts/${payload}`);
 
     return response.data.post;
   } catch (err) {
@@ -124,7 +130,7 @@ const postsReducer = createSlice({
         state.error = null;
       })
       .addCase(fetchProfilePage.fulfilled, (state, action) => {
-        state.currentPost = action.payload;
+        state.accumulatedData = action.payload;
         state.status = "succeeded";
         state.error = null;
       })

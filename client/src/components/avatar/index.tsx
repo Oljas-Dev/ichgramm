@@ -11,10 +11,10 @@ export default function Avatar({
   return (
     <>
       {user?.avatar ? (
-        <img src={user?.avatar} alt={`${user?.fullname}'s name`} width={168} />
+        <img src={user?.avatar} alt={`${user?.username}'s name`} width={168} />
       ) : (
         <PicturePlaceholder $profile $width={size} $height={size}>
-          {user?.fullname[0]?.toUpperCase()}
+          {user?.username[0]?.toUpperCase()}
         </PicturePlaceholder>
       )}
     </>

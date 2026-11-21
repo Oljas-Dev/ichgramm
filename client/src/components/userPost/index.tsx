@@ -3,9 +3,11 @@ import styled from "styled-components";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 
-import type { Post } from "../../redux/slices/postsLoader";
+import { fetchPostById, type Post } from "../../redux/slices/postsLoader";
 import ProfileRow from "../profileRow";
 import LikesGroup from "../likesGroup";
+import { useAppDispatch } from "../../hooks/hooks";
+import { setModal } from "../../redux/slices/modalSlice";
 
 dayjs.extend(relativeTime);
 
@@ -13,6 +15,10 @@ const UserPostContainer = styled.div`
   max-height: fit-content;
   padding-bottom: 2.375rem;
   border-bottom: 1px solid var(--gray-border);
+`;
+
+const PostImageContainer = styled.div`
+  cursor: pointer;
 `;
 
 const PostImage = styled.img`
@@ -45,6 +51,13 @@ export default function UserPost({
   myPost: boolean;
   i: number;
 }) {
+  const dispatch = useAppDispatch();
+
+  function openPost(id: string) {
+    dispatch(fetchPostById(id));
+    dispatch(setModal("currentPost"));
+  }
+
   return (
     <UserPostContainer>
       <Flex vertical gap={8}>
@@ -53,13 +66,15 @@ export default function UserPost({
           follow={!myPost}
           createdAt={post.user.createdAt}
         />
-        <PostImage
-          src={`http://localhost:3333${post.image}`}
-          alt={`post-${i}`}
-        />
+        <PostImageContainer onClick={() => openPost(post._id)}>
+          <PostImage
+            src={`http://localhost:3333${post.image}`}
+            alt={`post-${i}`}
+          />
+        </PostImageContainer>
       </Flex>
 
-      <LikesGroup />
+      <LikesGroup id={post._id} />
 
       {post?.likes && <SmallBoldText>{post.likes} likes</SmallBoldText>}
 
