@@ -1,29 +1,36 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import axios from "axios";
+import { createSlice } from "@reduxjs/toolkit";
 import type { User } from "./authSlice";
 import type { currentPostType } from "../../types/projectTypes";
-import { fetchUrl } from "../../variables/commonVariables";
+import {
+  deletePost,
+  fetchAllPosts,
+  fetchPostById,
+  fetchProfilePage,
+} from "../functions/postFunctions";
+import type { LikeTypes } from "./likeSlice";
+
 export interface Post {
   _id: string;
   description: string;
   image: string;
-  likes?: number;
+  likes: LikeTypes[];
   user: User;
   isOwner: boolean;
 }
 
-interface accumulatedDataTypes {
+export interface accumulatedDataTypes {
   profilePosts: currentPostType[];
   profileData: User;
 }
 
-interface PostsState {
+export interface PostsState {
   data: Post[];
   accumulatedData: accumulatedDataTypes | null;
   currentPost: currentPostType[];
   postById: currentPostType;
   status: "idle" | "loading" | "succeeded" | "failed";
   error: string | null;
+  loading?: boolean;
 }
 
 const initialState: PostsState = {
@@ -33,7 +40,7 @@ const initialState: PostsState = {
   postById: {
     description: "",
     image: "",
-    likes: 0,
+    likes: [],
     comments: [],
     createdAt: "",
     updatedAt: "",
@@ -43,68 +50,6 @@ const initialState: PostsState = {
   status: "idle",
   error: null,
 };
-
-export const fetchAllPosts = createAsyncThunk<
-  Post[],
-  string,
-  { rejectValue: string }
->("loader/fetchAllPosts", async (payload, thunkApi) => {
-  try {
-    const response = await axios.get(`${fetchUrl}/${payload}/all`, {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
-    });
-
-    return response.data;
-  } catch (err) {
-    if (axios.isAxiosError(err)) {
-      return thunkApi.rejectWithValue(
-        err.response?.data?.message || err.message,
-      );
-    }
-    return thunkApi.rejectWithValue("Something went wrong");
-  }
-});
-
-export const fetchProfilePage = createAsyncThunk<
-  accumulatedDataTypes,
-  string | undefined,
-  { rejectValue: string }
->("loader/fetchProfilePage", async (payload, thunkApi) => {
-  try {
-    const response = await axios.get(`${fetchUrl}/profilePage/${payload}`);
-
-    return response.data.accumulatedData;
-  } catch (err) {
-    if (axios.isAxiosError(err)) {
-      return thunkApi.rejectWithValue(
-        err.response?.data?.message || err.message,
-      );
-    }
-    return thunkApi.rejectWithValue("Something went wrong");
-  }
-});
-
-export const fetchPostById = createAsyncThunk<
-  currentPostType,
-  string | undefined,
-  { rejectValue: string }
->("loader/postById", async (payload, thunkApi) => {
-  try {
-    const response = await axios.get(`${fetchUrl}/posts/${payload}`);
-
-    return response.data.post;
-  } catch (err) {
-    if (axios.isAxiosError(err)) {
-      return thunkApi.rejectWithValue(
-        err.response?.data?.message || err.message,
-      );
-    }
-    return thunkApi.rejectWithValue("Something went wrong");
-  }
-});
 
 const postsReducer = createSlice({
   name: "postsLoader",
@@ -150,6 +95,19 @@ const postsReducer = createSlice({
       .addCase(fetchPostById.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.payload ?? action.error.message ?? "Unknown error";
+      })
+      .addCase(deletePost.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(deletePost.fulfilled, (state, action) => {
+        state.loading = false;
+
+        state.data = state.data.filter((post) => post._id !== action.payload);
+      })
+      .addCase(deletePost.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload || "Failed to delete post";
       });
   },
 });

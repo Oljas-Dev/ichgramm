@@ -56,6 +56,7 @@ export const PicturePlaceholder = styled.div<ProfileProps>`
   color: var(--gray-border);
   border-radius: 50%;
 
+  flex-shrink: 0;
   border: ${({ $profile }) => $profile && "1px solid rgba(0, 0, 0, 0.098)"};
 `;
 

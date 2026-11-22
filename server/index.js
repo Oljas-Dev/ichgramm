@@ -8,9 +8,11 @@ import userRouter from "./routes/user.js";
 import postRouter from "./routes/post.js";
 import allPostsRouter from "./routes/allPosts.js";
 import postById from "./routes/postById.js";
+import deletePost from "./routes/deletePost.js";
 import profilePage from "./routes/profilePage.js";
 import comment from "./routes/comment.js";
 import updateUser from "./routes/updateUser.js";
+import likePost from "./routes/likePost.js";
 
 const app = express();
 const port = process.env.PORT || 3333;
@@ -30,14 +32,18 @@ app.get("/", (req, res) => {
 });
 
 app.use("/uploads", express.static("uploads"));
+app.use("/avatars", express.static("public/avatars"));
 app.use("/auth", authRouter);
 app.use("/user", userRouter);
 app.use("/posts", postRouter);
 app.use("/posts", allPostsRouter);
 app.use("/posts", postById);
+app.use("/posts", deletePost);
 app.use("/profilePage", profilePage);
 app.use("/comment", comment);
 app.use("/update-user", updateUser);
+app.use("/like", likePost);
+app.use("/dislike", likePost);
 
 connectToDatabase()
   .then(() => {

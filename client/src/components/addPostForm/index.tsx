@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
-import type { CreatePostFormValues } from "../../pages/home/create-post";
+import { type CreatePostFormValues } from "../../pages/home/create-post";
 import {
   FormHeader,
   Form,
@@ -12,6 +12,7 @@ import {
   StyledTextarea,
   CharacterCounter,
   EmojiWrapper,
+  StyledPreviewImg,
 } from "../../pages/home/create-post/styles";
 import { Button } from "antd";
 import ProfileRow from "../profileRow";
@@ -41,6 +42,7 @@ interface AddPostFormProps {
   reset: UseFormReset<CreatePostFormValues>;
   setValue: UseFormSetValue<CreatePostFormValues>;
   errors: FieldErrors<CreatePostFormValues>;
+  previewImg: string | null;
 }
 
 export default function AddPostForm({
@@ -51,6 +53,7 @@ export default function AddPostForm({
   reset,
   setValue,
   errors,
+  previewImg,
 }: AddPostFormProps) {
   const [showEmojii, setShowEmojii] = useState(false);
 
@@ -111,7 +114,10 @@ export default function AddPostForm({
       </FormHeader>
 
       <InputArea>
-        <AddFileContainer>
+        <AddFileContainer vertical gap={16} justify="center">
+          {previewImg && (
+            <StyledPreviewImg src={previewImg} alt="Post image preview" />
+          )}
           <button type="button" onClick={showModal}>
             <img src={cloudImg} alt="Cloud Image" />
           </button>

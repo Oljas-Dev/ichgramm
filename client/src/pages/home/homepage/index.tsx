@@ -1,8 +1,8 @@
 import { useEffect } from "react";
 import styled from "styled-components";
 
-import { fetchAllPosts } from "../../../redux/slices/postsLoader";
 import { useAppDispatch, useAppSelector } from "../../../hooks/hooks";
+import { fetchAllPosts } from "../../../redux/functions/postFunctions";
 
 import UserPost from "../../../components/userPost";
 import ScrollEnd from "../../../components/scrollEnd";

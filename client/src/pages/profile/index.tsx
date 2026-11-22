@@ -17,11 +17,12 @@ import {
   ProfilePageContainer,
 } from "./styles";
 import type { currentPostType } from "../../types/projectTypes";
+import { setModal } from "../../redux/slices/modalSlice";
+import { fetchUrl } from "../../variables/commonVariables";
 import {
   fetchPostById,
   fetchProfilePage,
-} from "../../redux/slices/postsLoader";
-import { setModal } from "../../redux/slices/modalSlice";
+} from "../../redux/functions/postFunctions";
 
 export default function ProfilePage() {
   const { userId } = useParams();
@@ -67,7 +68,7 @@ export default function ProfilePage() {
           {data?.website && (
             <Flex gap={8}>
               <img src={linkImg} alt="link image" />
-              <Link to="#">{data?.website}</Link>
+              <Link to={`http://${data?.website}`}>{data?.website}</Link>
             </Flex>
           )}
         </Flex>
@@ -82,7 +83,7 @@ export default function ProfilePage() {
               key={picture._id}
             >
               <ImageContainer
-                src={`http://localhost:3333${picture.image}`}
+                src={`${fetchUrl}${picture.image}`}
                 alt={picture._id}
               />
             </Link>

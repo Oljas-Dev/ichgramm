@@ -1,5 +1,15 @@
+import styled from "styled-components";
 import type { User } from "../../redux/slices/authSlice";
 import { PicturePlaceholder } from "../../styles/common";
+import { fetchUrl } from "../../variables/commonVariables";
+
+const Image = styled.img`
+  border-radius: 50%;
+  aspect-ratio: 1/1;
+  object-fit: cover;
+  object-position: top;
+  flex-shrink: 0;
+`;
 
 export default function Avatar({
   user,
@@ -8,10 +18,16 @@ export default function Avatar({
   user?: User | null;
   size?: string;
 }) {
+  // console.log(user);
+
   return (
     <>
       {user?.avatar ? (
-        <img src={user?.avatar} alt={`${user?.username}'s name`} width={168} />
+        <Image
+          src={`${fetchUrl}${user?.avatar}`}
+          alt={`${user?.username}'s name`}
+          width={size}
+        />
       ) : (
         <PicturePlaceholder $profile $width={size} $height={size}>
           {user?.username[0]?.toUpperCase()}

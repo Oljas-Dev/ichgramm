@@ -3,11 +3,16 @@ import styled from "styled-components";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 
-import { fetchPostById, type Post } from "../../redux/slices/postsLoader";
+import { type Post } from "../../redux/slices/postsSlice";
 import ProfileRow from "../profileRow";
 import LikesGroup from "../likesGroup";
-import { useAppDispatch } from "../../hooks/hooks";
+import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
 import { setModal } from "../../redux/slices/modalSlice";
+import { fetchUrl } from "../../variables/commonVariables";
+import {
+  fetchAllPosts,
+  fetchPostById,
+} from "../../redux/functions/postFunctions";
 
 dayjs.extend(relativeTime);
 
@@ -52,6 +57,9 @@ export default function UserPost({
   i: number;
 }) {
   const dispatch = useAppDispatch();
+  const avatar = useAppSelector((state) => state.user.data)?.avatar;
+
+  const likes = post?.likes;
 
   function openPost(id: string) {
     dispatch(fetchPostById(id));
@@ -63,6 +71,7 @@ export default function UserPost({
       <Flex vertical gap={8}>
         <ProfileRow
           name={post.user.username}
+          img={`${fetchUrl}${avatar}`}
           follow={!myPost}
           createdAt={post.user.createdAt}
         />
@@ -74,9 +83,15 @@ export default function UserPost({
         </PostImageContainer>
       </Flex>
 
-      <LikesGroup id={post._id} />
+      <LikesGroup
+        id={post._id}
+        likes={likes}
+        render={() => dispatch(fetchAllPosts("posts"))}
+      />
 
-      {post?.likes && <SmallBoldText>{post.likes} likes</SmallBoldText>}
+      {likes?.length > 0 ? (
+        <SmallBoldText>{likes.length} likes</SmallBoldText>
+      ) : null}
 
       <UserDescription gap={8} align="center">
         <SmallBoldText>{post.user.username}</SmallBoldText>

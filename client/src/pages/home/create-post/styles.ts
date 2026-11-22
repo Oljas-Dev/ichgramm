@@ -44,9 +44,9 @@ export const InputArea = styled.div`
   grid-template-columns: 70% 30%;
 `;
 
-export const AddFileContainer = styled.div`
+export const AddFileContainer = styled(Flex)`
+  min-height: 500px;
   background-color: rgba(250, 250, 250, 1);
-  padding: 184px 210px;
   border-right: 1px solid var(--gray-border);
 `;
 
@@ -81,4 +81,12 @@ export const CharacterCounter = styled.span<CounterProps>`
   bottom: ${({ $bottom }) => $bottom || "10px"};
   font-size: 0.75rem;
   color: #888;
+`;
+
+export const StyledPreviewImg = styled.img`
+  align-self: center;
+  width: 200px;
+  height: 200px;
+  objectfit: cover;
+  margintop: 16px;
 `;

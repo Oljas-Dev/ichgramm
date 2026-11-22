@@ -20,6 +20,14 @@ const ProfileRowContainer = styled.div<ProfileProps>`
   }
 `;
 
+const AvatarImage = styled.img`
+  border-radius: 50%;
+  aspect-ratio: 1/1;
+  object-fit: cover;
+  object-position: top;
+  flex-shrink: 0;
+`;
+
 const UserSinceP = styled.p`
   color: var(--gray-text);
 `;
@@ -45,7 +53,7 @@ export default function ProfileRow({
     return (
       <ProfileRowContainer $profile>
         {img ? (
-          <img src={img} alt={`${name}'s name`} width={28} />
+          <AvatarImage src={img} alt={`${name}'s name`} width={28} />
         ) : (
           <PicturePlaceholder $profile>
             {name[0].toUpperCase()}
@@ -58,7 +66,7 @@ export default function ProfileRow({
     return (
       <ProfileRowContainer>
         {img ? (
-          <img src={img} alt={`${name}'s name`} width={28} />
+          <AvatarImage src={img} alt={`${name}'s name`} width={28} />
         ) : (
           <PicturePlaceholder>{name[0].toUpperCase()}</PicturePlaceholder>
         )}

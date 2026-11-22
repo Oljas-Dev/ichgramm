@@ -17,7 +17,7 @@ router.get("/current", authenticateJWT, async (req, res) => {
       username: user.username,
       website: user.website,
       about: user.about,
-      avatar: null,
+      avatar: user.avatar,
       createdAt: user.createdAt,
       _id: user._id,
     };

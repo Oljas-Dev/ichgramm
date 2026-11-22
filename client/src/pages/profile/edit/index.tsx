@@ -1,38 +1,32 @@
-import { Button, Flex } from "antd";
-
-import Avatar from "../../../components/avatar";
-import linkIcon from "./../../../assets/profile_link.svg";
-import { CharacterCounter } from "../../home/create-post/styles";
-import {
-  EditInput,
-  EditProfileContainer,
-  InputIcon,
-  InputsContainer,
-  InputWithIcon,
-  NewAvatar,
-  StyledButton,
-  StyledTextarea,
-} from "./styles";
-import { useAppDispatch, useAppSelector } from "../../../hooks/hooks";
-import { useForm, type SubmitHandler } from "react-hook-form";
-import { ErrorP } from "../../../styles/common";
-import { updateUserProfile } from "../../../redux/slices/updateUserSlice";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useForm, type SubmitHandler } from "react-hook-form";
 import toast from "react-hot-toast";
-import { useEffect } from "react";
+import { Button, Flex, Modal } from "antd";
+import { useAppDispatch, useAppSelector } from "../../../hooks/hooks";
+
+import { updateUserProfile } from "../../../redux/slices/updateUserSlice";
+import Avatar from "../../../components/avatar";
+import EditProfileInputs from "../../../components/editProfileInputs";
+
+import { EditProfileContainer, NewAvatar, StyledButton } from "./styles";
+import { ErrorP } from "../../../styles/common";
 
 export interface UpdateUserTypes {
   username: string;
-  avatar: File | null;
+  avatar: FileList | null;
   website: string;
   about: string;
 }
 
 export default function EditProfile() {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const {
     register,
     handleSubmit,
     reset,
+    watch,
     formState: { errors },
   } = useForm<UpdateUserTypes>({
     defaultValues: {
@@ -49,14 +43,50 @@ export default function EditProfile() {
   )?.profileData;
   const navigate = useNavigate();
 
-  const websiteRegex = /^(https?:\/\/)?([\w-]+\.)+[\w-]{2,}(\/[\w\-./?%&=]*)?$/;
+  const submit: SubmitHandler<UpdateUserTypes> = async (data) => {
+    try {
+      await dispatch(
+        updateUserProfile({
+          userId: user?._id,
+          data,
+        }),
+      ).unwrap();
 
-  const submit: SubmitHandler<UpdateUserTypes> = (data) => {
-    dispatch(updateUserProfile({ userId: user?._id, data })).unwrap();
-    reset(data);
-    toast.success("User profile was successfully updated");
-    navigate(`/profile/${user?._id}`);
+      toast.success("Profile successfully updated");
+      navigate(`/profile/${user?._id}`);
+    } catch (error) {
+      console.error(error);
+
+      toast.error("Could not update profile");
+    }
   };
+
+  const showModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleOk = () => {
+    setIsModalOpen(false);
+  };
+
+  const handleCancel = () => {
+    setIsModalOpen(false);
+  };
+
+  const avatarFile = watch("avatar");
+
+  // Preview avatar before uploading
+  useEffect(() => {
+    if (!avatarFile?.[0]) {
+      setPreviewUrl(null);
+      return;
+    }
+
+    const url = URL.createObjectURL(avatarFile[0]);
+    setPreviewUrl(url);
+
+    return () => URL.revokeObjectURL(url);
+  }, [avatarFile]);
 
   useEffect(() => {
     // form inputs autofill
@@ -85,69 +115,54 @@ export default function EditProfile() {
             </Flex>
           </Flex>
 
-          <Button type="primary">New photo</Button>
+          <Button type="primary" onClick={showModal}>
+            New photo
+          </Button>
         </NewAvatar>
 
-        <InputsContainer vertical gap={21}>
-          <Flex vertical gap={8}>
-            <label htmlFor="username">Username</label>
-            <EditInput
-              type="text"
-              placeholder="username"
-              {...register("username", {
-                minLength: {
-                  value: 2,
-                  message: "Minimum username length is 2",
-                },
-              })}
-            />
-            {errors.username?.message && (
-              <ErrorP>{errors.username?.message}</ErrorP>
-            )}
-          </Flex>
-
-          <InputWithIcon vertical gap={8}>
-            <label htmlFor="username">Website</label>
-            <EditInput
-              type="text"
-              placeholder="website"
-              $icon
-              {...register("website", {
-                pattern: {
-                  value: websiteRegex,
-                  message: "Website does not seem correct",
-                },
-              })}
-            />
-            <InputIcon src={linkIcon} alt="link icon" width={12} />
-
-            {errors.website?.message && (
-              <ErrorP>{errors.website?.message}</ErrorP>
-            )}
-          </InputWithIcon>
-
-          <InputWithIcon vertical gap={8}>
-            <label htmlFor="username">About</label>
-            <StyledTextarea
-              placeholder="tell about yourself"
-              {...register("about", {
-                maxLength: {
-                  value: 150,
-                  message: `Maximum length is 150 characters`,
-                },
-              })}
-            />
-            <CharacterCounter>
-              {0}/{150}
-            </CharacterCounter>
-            {errors.about?.message && <ErrorP>{errors.about?.message}</ErrorP>}
-          </InputWithIcon>
-        </InputsContainer>
+        <EditProfileInputs register={register} errors={errors} />
       </Flex>
 
       <StyledButton type="primary" htmlType="submit">
         Save
       </StyledButton>
+
+      <Modal
+        title="Choose your new avatar"
+        open={isModalOpen}
+        onOk={handleOk}
+        onCancel={handleCancel}
+      >
+        <input
+          type="file"
+          accept="image/*"
+          {...register("avatar", {
+            required: "Please select an image",
+            validate: {
+              fileSize: (files) =>
+                !files?.[0] ||
+                files[0].size <= 5 * 1024 * 1024 ||
+                "Maximum image size is 5 MB",
+            },
+          })}
+        />
+
+        {errors.avatar?.message && <ErrorP>{errors.avatar.message}</ErrorP>}
+
+        {previewUrl && (
+          <img
+            src={previewUrl}
+            alt="Avatar preview"
+            style={{
+              width: "150px",
+              height: "150px",
+              objectFit: "cover",
+              borderRadius: "50%",
+              marginTop: "16px",
+            }}
+          />
+        )}
+      </Modal>
     </EditProfileContainer>
   );
 }

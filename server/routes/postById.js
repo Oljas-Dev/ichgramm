@@ -1,6 +1,7 @@
 import express from "express";
 import Post from "../models/Post.js";
 import Comment from "../models/Comment.js";
+import Like from "../models/Like.js";
 
 const router = express.Router();
 
@@ -26,9 +27,12 @@ router.get("/:postId", async (req, res) => {
       })
       .sort({ createdAt: -1 });
 
+    const likes = await Like.find({ postId });
+
     const postWithComments = {
       ...post.toObject(),
       comments,
+      likes,
     };
 
     return res.status(200).json({

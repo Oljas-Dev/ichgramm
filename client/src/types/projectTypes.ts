@@ -1,4 +1,5 @@
 import type { User } from "../redux/slices/authSlice";
+import type { LikeTypes } from "../redux/slices/likeSlice";
 
 export interface commentsTypes {
   comment: string;
@@ -13,7 +14,7 @@ export interface commentsTypes {
 export interface currentPostType {
   description: string;
   image: string;
-  likes: number;
+  likes: LikeTypes[];
   comments: commentsTypes[];
   createdAt: string;
   updatedAt: string;

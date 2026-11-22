@@ -13,7 +13,7 @@ router.get("/:userId", async (req, res) => {
         message: "Did not find user",
       });
     }
-    const myPosts = await Post.find({ user: userId });
+    const myPosts = await Post.find({ user: userId }).sort({ createdAt: -1 });
     const profileData = await User.find({ _id: userId }).select(
       "-password -email",
     );

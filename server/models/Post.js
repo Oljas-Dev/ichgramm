@@ -16,6 +16,15 @@ const postSchema = mongoose.Schema(
   { timestamps: true },
 );
 
+postSchema.virtual("likes", {
+  ref: "Like",
+  localField: "_id",
+  foreignField: "postId",
+});
+
+postSchema.set("toJSON", { virtuals: true });
+postSchema.set("toObject", { virtuals: true });
+
 const Post = mongoose.model("Post", postSchema);
 
 export default Post;

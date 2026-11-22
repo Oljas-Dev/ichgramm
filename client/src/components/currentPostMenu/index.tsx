@@ -1,7 +1,14 @@
-import { Flex } from "antd";
+import { Flex, Modal } from "antd";
 import styled from "styled-components";
 import { useAppDispatch } from "../../hooks/hooks";
+import {
+  deletePost,
+  fetchProfilePage,
+} from "../../redux/functions/postFunctions";
+import toast from "react-hot-toast";
 import { closeModal } from "../../redux/slices/modalSlice";
+import { useParams } from "react-router-dom";
+import type { Dispatch, SetStateAction } from "react";
 
 const Container = styled(Flex)`
   width: 100%;
@@ -35,17 +42,50 @@ const StyledUl = styled.ul`
   }
 `;
 
-export default function CurrentPostMenu() {
+export default function CurrentPostMenu({
+  postId,
+  close,
+  onFinish,
+}: {
+  postId: string | undefined;
+  close: (e: React.MouseEvent<HTMLLIElement>) => void;
+  onFinish: Dispatch<SetStateAction<boolean>>;
+}) {
+  const [modal, contextHolder] = Modal.useModal();
+  const { userId } = useParams();
   const dispatch = useAppDispatch();
 
+  const deletePostById = (postId: string | undefined) => {
+    dispatch(deletePost(postId)).unwrap();
+    dispatch(closeModal());
+    onFinish(false);
+
+    toast.success("Post was deleted");
+    dispatch(fetchProfilePage(userId));
+  };
+
+  const confirm = () => {
+    modal.confirm({
+      title: "Confirm",
+      content: "Are you sure you want to delete this post?",
+      okText: "yes",
+      cancelText: "cancel",
+      onOk: () => deletePostById(postId),
+    });
+  };
+
   return (
-    <Container justify="center" align="center">
+    <Container justify="center" align="center" onClick={close}>
+      {contextHolder}
+
       <StyledUl>
-        <li style={{ color: "rgba(237, 73, 86, 1)" }}>Delete</li>
+        <li style={{ color: "rgba(237, 73, 86, 1)" }} onClick={confirm}>
+          Delete
+        </li>
         <li>Edit</li>
         <li>Go to post</li>
         <li>Copy link</li>
-        <li onClick={() => dispatch(closeModal())}>Cancel</li>
+        <li onClick={close}>Cancel</li>
       </StyledUl>
     </Container>
   );

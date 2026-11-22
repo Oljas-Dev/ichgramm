@@ -21,9 +21,19 @@ export const updateUserProfile = createAsyncThunk<
   { rejectValue: string }
 >("update/updateUser", async (payload, thunkApi) => {
   try {
+    const formData = new FormData();
+
+    formData.append("username", payload.data.username);
+    formData.append("website", payload.data.website);
+    formData.append("about", payload.data.about);
+
+    if (payload.data.avatar?.[0]) {
+      formData.append("image", payload.data.avatar[0]);
+    }
+
     const response = await axios.put(
       `${fetchUrl}/update-user/${payload.userId}`,
-      payload.data,
+      formData,
       {
         method: "PUT",
         headers: {

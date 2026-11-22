@@ -11,7 +11,7 @@ import { fetchUrl } from "../../variables/commonVariables";
 import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
 import toast from "react-hot-toast";
 import type { ApiError } from "../../pages/auth/register";
-import { fetchPostById } from "../../redux/slices/postsLoader";
+import { fetchPostById } from "../../redux/functions/postFunctions";
 
 interface postCommentTypes {
   postComment: string;

@@ -1,6 +1,7 @@
 import express from "express";
 import authenticateJWT from "./../middleware/authMiddleware.js";
 import Post from "./../models/Post.js";
+import Like from "../models/Like.js";
 
 const router = express.Router();
 
@@ -10,10 +11,16 @@ router.get("/all", authenticateJWT, async (req, res) => {
   try {
     const allPosts = await Post.aggregate([{ $sample: { size: 1000 } }]);
 
-    await Post.populate(allPosts, {
-      path: "user",
-      select: "username fullname createdAt",
-    });
+    await Post.populate(allPosts, [
+      {
+        path: "user",
+        select: "username fullname createdAt",
+      },
+      {
+        path: "likes",
+        select: "postId likedBy",
+      },
+    ]);
 
     const postWithOwnership = allPosts.map((post) => ({
       ...post,
