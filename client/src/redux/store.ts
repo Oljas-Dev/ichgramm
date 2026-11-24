@@ -4,6 +4,7 @@ import authReducer from "./slices/authSlice";
 import modalReducer from "./slices/modalSlice";
 import updateUserReducer from "./slices/updateUserSlice";
 import likesReducer from "./slices/likeSlice";
+import searchUsersReducer from "./slices/searchUsersSlice";
 
 const store = configureStore({
   reducer: {
@@ -12,6 +13,7 @@ const store = configureStore({
     modal: modalReducer,
     updateUser: updateUserReducer,
     likes: likesReducer,
+    searchUsers: searchUsersReducer,
   },
 });
 

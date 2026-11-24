@@ -6,7 +6,7 @@ import relativeTime from "dayjs/plugin/relativeTime";
 import { type Post } from "../../redux/slices/postsSlice";
 import ProfileRow from "../profileRow";
 import LikesGroup from "../likesGroup";
-import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
+import { useAppDispatch } from "../../hooks/hooks";
 import { setModal } from "../../redux/slices/modalSlice";
 import { fetchUrl } from "../../variables/commonVariables";
 import {
@@ -57,8 +57,8 @@ export default function UserPost({
   i: number;
 }) {
   const dispatch = useAppDispatch();
-  const avatar = useAppSelector((state) => state.user.data)?.avatar;
 
+  const avatar = post?.user?.avatar;
   const likes = post?.likes;
 
   function openPost(id: string) {
@@ -74,6 +74,7 @@ export default function UserPost({
           img={`${fetchUrl}${avatar}`}
           follow={!myPost}
           createdAt={post.user.createdAt}
+          userId={post.user._id}
         />
         <PostImageContainer onClick={() => openPost(post._id)}>
           <PostImage

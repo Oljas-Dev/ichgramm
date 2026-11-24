@@ -3,6 +3,7 @@ import styled from "styled-components";
 import ProfileRow from "../profileRow";
 import { useAppDispatch } from "../../hooks/hooks";
 import { setModal } from "../../redux/slices/modalSlice";
+import type { ModalTypes } from "../../types/projectTypes";
 
 const StyledMenuRow = styled.li`
   display: flex;
@@ -27,6 +28,18 @@ export default function MenuRow({
   modal: boolean;
 }) {
   const dispatch = useAppDispatch();
+  const allowedModalTypes = [
+    "postMenu",
+    "currentPost",
+    "Create",
+    "Search",
+    "Notifications",
+    "",
+  ];
+
+  const isModalType = (value: string): value is ModalTypes => {
+    return allowedModalTypes.includes(value as ModalTypes);
+  };
 
   if (title === "Profile") {
     return (
@@ -34,7 +47,7 @@ export default function MenuRow({
         <ProfileRow name={title} menuRow />
       </NavLink>
     );
-  } else if (modal) {
+  } else if (modal && isModalType(title)) {
     return (
       <StyledMenuRow onClick={() => dispatch(setModal(title))}>
         <img src={icon} alt={`${title}-icon`} width={24} />

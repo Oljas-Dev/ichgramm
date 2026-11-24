@@ -13,6 +13,7 @@ import profilePage from "./routes/profilePage.js";
 import comment from "./routes/comment.js";
 import updateUser from "./routes/updateUser.js";
 import likePost from "./routes/likePost.js";
+import searchUsers from "./routes/search.js";
 
 const app = express();
 const port = process.env.PORT || 3333;
@@ -35,6 +36,7 @@ app.use("/uploads", express.static("uploads"));
 app.use("/avatars", express.static("public/avatars"));
 app.use("/auth", authRouter);
 app.use("/user", userRouter);
+app.use("/users", searchUsers);
 app.use("/posts", postRouter);
 app.use("/posts", allPostsRouter);
 app.use("/posts", postById);

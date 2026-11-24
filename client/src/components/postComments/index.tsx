@@ -7,6 +7,9 @@ import { TextGray } from "../../styles/common";
 import redHeart from "./../../assets/red_heart_comment.svg";
 import blankHeart from "./../../assets/blank_heart_comment.svg";
 import type { commentsTypes } from "../../types/projectTypes";
+import { Link } from "react-router-dom";
+import { useAppDispatch } from "../../hooks/hooks";
+import { closeModal } from "../../redux/slices/modalSlice";
 
 const Comment = styled(CurrentDescription)`
   grid-column: span 2;
@@ -19,9 +22,15 @@ const CommentInfo = styled(Flex)`
 `;
 
 export default function PostComments({ comment }: { comment: commentsTypes }) {
+  const dispatch = useAppDispatch();
   return (
     <Comment>
-      <Avatar user={comment.commentBy} size="28px" />
+      <Link
+        to={`/profile/${comment.commentBy._id}`}
+        onClick={() => dispatch(closeModal())}
+      >
+        <Avatar user={comment.commentBy} size="28px" />
+      </Link>
 
       <CommentInfo justify="space-between" align="center">
         <Flex vertical gap={8}>

@@ -6,8 +6,6 @@ const router = express.Router();
 router.post("/:userId", async (req, res) => {
   const { comment, postId } = req.body;
 
-  console.log(postId);
-
   try {
     const commentBy = req.params.userId;
 

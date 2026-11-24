@@ -12,9 +12,7 @@ const FooterContainer = styled.footer`
   background-color: #fff;
   padding: 22px 0 61px;
 
-  position: sticky;
-  bottom: 0;
-  z-index: 10;
+  z-index: 100;
 
   font-size: var(--small-text-xs);
   color: var(--gray-text);

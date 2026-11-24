@@ -4,9 +4,10 @@ import styled from "styled-components";
 export const MainContainer = styled.main`
   display: grid;
   grid-template-columns: 15.25rem 1fr;
+  grid-template-rows: 80% 1fr;
   max-width: 1440px;
   width: 100%;
-  min-height: 85vh;
+  height: 100vh;
   margin: 0 auto;
 
   position: relative;

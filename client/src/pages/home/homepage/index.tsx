@@ -7,6 +7,10 @@ import { fetchAllPosts } from "../../../redux/functions/postFunctions";
 import UserPost from "../../../components/userPost";
 import ScrollEnd from "../../../components/scrollEnd";
 
+const PostGroup = styled.div`
+  overflow: auto;
+`;
+
 const PostsContainer = styled.section`
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -29,7 +33,7 @@ export default function Homepage() {
   }, [dispatch]);
 
   return (
-    <>
+    <PostGroup>
       <PostsContainer>
         {data.map((post, i) => {
           return (
@@ -38,6 +42,6 @@ export default function Homepage() {
         })}
       </PostsContainer>
       <ScrollEnd />
-    </>
+    </PostGroup>
   );
 }

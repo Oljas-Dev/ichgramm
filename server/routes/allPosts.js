@@ -14,7 +14,7 @@ router.get("/all", authenticateJWT, async (req, res) => {
     await Post.populate(allPosts, [
       {
         path: "user",
-        select: "username fullname createdAt",
+        select: "username fullname createdAt avatar",
       },
       {
         path: "likes",

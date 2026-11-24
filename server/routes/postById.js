@@ -20,12 +20,10 @@ router.get("/:postId", async (req, res) => {
       "username avatar fullname",
     );
 
-    const comments = await Comment.find({ postId })
-      .populate({
-        path: "commentBy",
-        select: "username fullname avatar",
-      })
-      .sort({ createdAt: -1 });
+    const comments = await Comment.find({ postId }).populate({
+      path: "commentBy",
+      select: "username fullname avatar",
+    });
 
     const likes = await Like.find({ postId });
 

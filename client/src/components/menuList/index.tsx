@@ -21,7 +21,7 @@ export default function MenuList() {
       icon: search,
       title: "Search",
       link: "#",
-      modal: false,
+      modal: true,
     },
     {
       icon: explore,
@@ -39,7 +39,7 @@ export default function MenuList() {
       icon: heart,
       title: "Notifications",
       link: "#",
-      modal: false,
+      modal: true,
     },
     {
       icon: create,

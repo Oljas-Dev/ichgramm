@@ -1,6 +1,5 @@
 import express from "express";
 import authenticateJWT from "../middleware/authMiddleware.js";
-import checkUser from "../middleware/checkUser.js";
 import Like from "../models/Like.js";
 
 const router = express.Router();
@@ -35,6 +34,7 @@ router.post("/:postId", authenticateJWT, async (req, res) => {
     console.error("No reaction was left: ", err);
     res.status(500).json({
       message: "No reaction was left",
+      err,
     });
   }
 });

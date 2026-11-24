@@ -70,6 +70,7 @@ export default function CurrentPost() {
               <ProfileRow
                 name={currentPost.user?.username}
                 img={`${fetchUrl}${avatar}`}
+                userId={currentPost.user?._id}
               />
               <Button
                 variant="text"
