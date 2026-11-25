@@ -19,20 +19,18 @@ import {
 
 import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
 import AddPostComment from "../addPostComment";
-import { fetchUrl } from "../../variables/commonVariables";
 import CurrentPostMenu from "../currentPostMenu";
 import { useState, type MouseEvent } from "react";
 import { getMemberDuration } from "../../helpers/getMemberDuration";
 import { fetchPostById } from "../../redux/functions/postFunctions";
 
-export default function CurrentPost() {
+export default function CurrentPost({ follow = true }: { follow?: boolean }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [curretnPostId, setCurrentPostId] = useState<string | undefined>("");
   const currentPost = useAppSelector((state) => state.postsLoader.postById);
 
   const dispatch = useAppDispatch();
   const likes = currentPost?.likes.length;
-  const avatar = currentPost?.user?.avatar;
 
   if (!currentPost) throw Error("Could not find this post");
 
@@ -68,9 +66,9 @@ export default function CurrentPost() {
           <FlexGrow>
             <PostInfoHeader justify="space-between">
               <ProfileRow
-                name={currentPost.user?.username}
-                img={`${fetchUrl}${avatar}`}
+                post={currentPost}
                 userId={currentPost.user?._id}
+                followOption={follow}
               />
               <Button
                 variant="text"

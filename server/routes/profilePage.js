@@ -1,6 +1,7 @@
 import express from "express";
 import Post from "./../models/Post.js";
 import User from "../models/User.js";
+import Follow from "../models/Follow.js";
 
 const router = express.Router();
 
@@ -17,10 +18,16 @@ router.get("/:userId", async (req, res) => {
     const profileData = await User.find({ _id: userId }).select(
       "-password -email",
     );
+    const followers = await Follow.find({ following: userId }).select(
+      "following",
+    );
+    const followed = await Follow.find({ follower: userId }).select("follower");
 
     const accumulatedData = {
       profilePosts: myPosts,
       profileData: profileData[0],
+      followers,
+      followed,
     };
 
     return res.status(200).json({

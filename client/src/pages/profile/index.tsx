@@ -36,9 +36,9 @@ export default function ProfilePage() {
   const data = accumulatedData?.profileData;
 
   const state = {
-    posts: "123",
-    followers: "9993",
-    following: "59",
+    posts: pictures?.length,
+    followers: accumulatedData?.followers.length,
+    following: accumulatedData?.followed.length,
   };
 
   function handlePost(id: string | undefined) {

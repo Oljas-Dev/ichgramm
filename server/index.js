@@ -14,6 +14,7 @@ import comment from "./routes/comment.js";
 import updateUser from "./routes/updateUser.js";
 import likePost from "./routes/likePost.js";
 import searchUsers from "./routes/search.js";
+import followUser from "./routes/follow.js";
 
 const app = express();
 const port = process.env.PORT || 3333;
@@ -46,6 +47,9 @@ app.use("/comment", comment);
 app.use("/update-user", updateUser);
 app.use("/like", likePost);
 app.use("/dislike", likePost);
+app.use("/follow", followUser);
+app.use("/unfollow", followUser);
+app.use("/followers", followUser);
 
 connectToDatabase()
   .then(() => {

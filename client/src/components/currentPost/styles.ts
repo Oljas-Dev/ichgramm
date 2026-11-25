@@ -6,7 +6,8 @@ export const CurrentPostContainer = styled.div`
   grid-template-columns: 60% 40%;
   justify-content: center;
 
-  height: 60vh;
+  min-height: 60vh;
+  max-height: 80vh;
   z-index: 20;
 `;
 

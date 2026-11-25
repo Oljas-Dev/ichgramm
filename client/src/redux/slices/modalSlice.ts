@@ -6,8 +6,12 @@ interface ModalObject {
   name: ModalTypes;
 }
 
+type MenuTypes = "home" | "explore" | "messages" | "notifications" | "profile";
+
 interface ModalState {
   modal: ModalObject;
+  page: ModalTypes | MenuTypes;
+  prevPage: ModalTypes | MenuTypes;
 }
 
 const initialState: ModalState = {
@@ -15,6 +19,8 @@ const initialState: ModalState = {
     open: false,
     name: "",
   },
+  page: "home",
+  prevPage: "",
 };
 
 const modalSlice = createSlice({
@@ -26,12 +32,18 @@ const modalSlice = createSlice({
       state.modal.open = true;
     },
 
+    setPage: (state, action) => {
+      state.page = action.payload.next;
+      state.prevPage = action.payload.current;
+    },
+
     closeModal: (state) => {
+      state.page = state.prevPage;
       state.modal.name = "";
       state.modal.open = false;
     },
   },
 });
 
-export const { setModal, closeModal } = modalSlice.actions;
+export const { setModal, closeModal, setPage } = modalSlice.actions;
 export default modalSlice.reducer;

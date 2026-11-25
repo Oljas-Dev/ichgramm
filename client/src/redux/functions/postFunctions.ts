@@ -53,7 +53,11 @@ export const fetchPostById = createAsyncThunk<
   { rejectValue: string }
 >("loader/postById", async (payload, thunkApi) => {
   try {
-    const response = await axios.get(`${fetchUrl}/posts/${payload}`);
+    const response = await axios.get(`${fetchUrl}/posts/${payload}`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    });
 
     return response.data.post;
   } catch (err) {

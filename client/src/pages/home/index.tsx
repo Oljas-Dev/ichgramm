@@ -28,10 +28,10 @@ export default function Applayout() {
       <Footer />
 
       <ModalBackdrop $show={currentModal.open} $column="2" onClick={close}>
-        {(currentModal.name === "Create" && <CreatePost />) ||
+        {(currentModal.name === "create" && <CreatePost />) ||
           (currentModal.name === "currentPost" && <CurrentPost />) ||
-          (currentModal.name === "Search" && <Search />) ||
-          (currentModal.name === "Notifications" && <Notifications />)}
+          (currentModal.name === "search" && <Search />) ||
+          (currentModal.name === "notifications" && <Notifications />)}
       </ModalBackdrop>
     </MainContainer>
   );

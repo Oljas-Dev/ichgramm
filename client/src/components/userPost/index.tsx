@@ -8,7 +8,6 @@ import ProfileRow from "../profileRow";
 import LikesGroup from "../likesGroup";
 import { useAppDispatch } from "../../hooks/hooks";
 import { setModal } from "../../redux/slices/modalSlice";
-import { fetchUrl } from "../../variables/commonVariables";
 import {
   fetchAllPosts,
   fetchPostById,
@@ -53,12 +52,10 @@ export default function UserPost({
   i,
 }: {
   post: Post;
-  myPost: boolean;
+  myPost: boolean | undefined;
   i: number;
 }) {
   const dispatch = useAppDispatch();
-
-  const avatar = post?.user?.avatar;
   const likes = post?.likes;
 
   function openPost(id: string) {
@@ -70,9 +67,8 @@ export default function UserPost({
     <UserPostContainer>
       <Flex vertical gap={8}>
         <ProfileRow
-          name={post.user.username}
-          img={`${fetchUrl}${avatar}`}
-          follow={!myPost}
+          post={post}
+          followOption={!myPost}
           createdAt={post.user.createdAt}
           userId={post.user._id}
         />
@@ -91,7 +87,9 @@ export default function UserPost({
       />
 
       {likes?.length > 0 ? (
-        <SmallBoldText>{likes.length} likes</SmallBoldText>
+        <SmallBoldText>
+          {likes.length} {likes.length === 1 ? "like" : "likes"}
+        </SmallBoldText>
       ) : null}
 
       <UserDescription gap={8} align="center">

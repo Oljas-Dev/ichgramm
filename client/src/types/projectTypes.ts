@@ -19,13 +19,15 @@ export interface currentPostType {
   createdAt: string;
   updatedAt: string;
   user: User | null;
-  _id?: string;
+  isFollowing: boolean;
+  isOwner?: boolean;
+  _id?: string | undefined;
 }
 
 export type ModalTypes =
   | "postMenu"
   | "currentPost"
-  | "Create"
-  | "Search"
-  | "Notifications"
+  | "create"
+  | "search"
+  | "notifications"
   | "";

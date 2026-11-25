@@ -8,19 +8,23 @@ import {
   fetchProfilePage,
 } from "../functions/postFunctions";
 import type { LikeTypes } from "./likeSlice";
+import type { FollowTypes } from "./followSlice";
 
 export interface Post {
   _id: string;
   description: string;
   image: string;
   likes: LikeTypes[];
+  isFollowing: boolean;
   user: User;
-  isOwner: boolean;
+  isOwner?: boolean;
 }
 
 export interface accumulatedDataTypes {
   profilePosts: currentPostType[];
   profileData: User;
+  followers: FollowTypes[];
+  followed: FollowTypes[];
 }
 
 export interface PostsState {
@@ -45,6 +49,7 @@ const initialState: PostsState = {
     createdAt: "",
     updatedAt: "",
     user: null,
+    isFollowing: false,
     _id: "",
   },
   status: "idle",

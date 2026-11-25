@@ -11,6 +11,7 @@ import EditProfileInputs from "../../../components/editProfileInputs";
 
 import { EditProfileContainer, NewAvatar, StyledButton } from "./styles";
 import { ErrorP } from "../../../styles/common";
+import { logout } from "../../../redux/slices/authSlice";
 
 export interface UpdateUserTypes {
   username: string;
@@ -73,6 +74,11 @@ export default function EditProfile() {
     setIsModalOpen(false);
   };
 
+  const handleLogout = () => {
+    dispatch(logout());
+    navigate("/auth/login");
+  };
+
   const avatarFile = watch("avatar");
 
   // Preview avatar before uploading
@@ -123,9 +129,14 @@ export default function EditProfile() {
         <EditProfileInputs register={register} errors={errors} />
       </Flex>
 
-      <StyledButton type="primary" htmlType="submit">
-        Save
-      </StyledButton>
+      <Flex justify="space-between">
+        <StyledButton type="primary" htmlType="submit">
+          Save
+        </StyledButton>
+        <StyledButton type="text" onClick={handleLogout}>
+          log out
+        </StyledButton>
+      </Flex>
 
       <Modal
         title="Choose your new avatar"

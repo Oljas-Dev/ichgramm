@@ -14,8 +14,7 @@ import {
   EmojiWrapper,
   StyledPreviewImg,
 } from "../../pages/home/create-post/styles";
-import { Button } from "antd";
-import ProfileRow from "../profileRow";
+import { Button, Flex } from "antd";
 import EmojiPicker, { type EmojiClickData } from "emoji-picker-react";
 
 import cloudImg from "./../../assets/cloud.svg";
@@ -30,9 +29,11 @@ import type {
   FieldErrors,
   SubmitHandler,
 } from "react-hook-form";
-import { ErrorP } from "../../styles/common";
-import { useAppDispatch } from "../../hooks/hooks";
+import { ErrorP, PicturePlaceholder } from "../../styles/common";
+import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
 import { closeModal } from "../../redux/slices/modalSlice";
+import { AvatarImage, ProfileRowContainer } from "../profileRow/styles";
+import { fetchUrl } from "../../variables/commonVariables";
 
 interface AddPostFormProps {
   handleSubmit: UseFormHandleSubmit<CreatePostFormValues>;
@@ -56,6 +57,8 @@ export default function AddPostForm({
   previewImg,
 }: AddPostFormProps) {
   const [showEmojii, setShowEmojii] = useState(false);
+
+  const user = useAppSelector((state) => state.user.data);
 
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
@@ -125,7 +128,22 @@ export default function AddPostForm({
         </AddFileContainer>
 
         <TextareaGroup vertical gap={16}>
-          <ProfileRow name="skai_laba" />
+          <ProfileRowContainer>
+            {user?.avatar ? (
+              <AvatarImage
+                src={`${fetchUrl}${user?.avatar}`}
+                alt={`${user?.username}'s name`}
+                width={28}
+              />
+            ) : (
+              <PicturePlaceholder>
+                {user?.username[0].toUpperCase()}
+              </PicturePlaceholder>
+            )}
+            <Flex gap={8}>
+              <p>{user?.username}</p>
+            </Flex>
+          </ProfileRowContainer>
 
           <TextareaWrapper>
             <StyledTextarea

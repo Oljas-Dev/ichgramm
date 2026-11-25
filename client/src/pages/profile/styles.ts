@@ -17,7 +17,6 @@ export const HeaderContainer = styled.header`
   button {
     font-size: var(--font-size-small);
     font-weight: 600;
-    background-color: rgba(239, 239, 239, 1);
     padding-left: 2.5rem;
     padding-right: 2.5rem;
   }

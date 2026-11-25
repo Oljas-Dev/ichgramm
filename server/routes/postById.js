@@ -2,11 +2,14 @@ import express from "express";
 import Post from "../models/Post.js";
 import Comment from "../models/Comment.js";
 import Like from "../models/Like.js";
+import Follow from "../models/Follow.js";
+import authenticateJWT from "../middleware/authMiddleware.js";
 
 const router = express.Router();
 
-router.get("/:postId", async (req, res) => {
+router.get("/:postId", authenticateJWT, async (req, res) => {
   const { postId } = req.params;
+  const currentUserId = req.user.id;
 
   try {
     if (!postId) {
@@ -20,6 +23,12 @@ router.get("/:postId", async (req, res) => {
       "username avatar fullname",
     );
 
+    if (!post) {
+      return res.status(404).json({
+        message: "Post not found",
+      });
+    }
+
     const comments = await Comment.find({ postId }).populate({
       path: "commentBy",
       select: "username fullname avatar",
@@ -27,10 +36,17 @@ router.get("/:postId", async (req, res) => {
 
     const likes = await Like.find({ postId });
 
+    const isFollowing = await Follow.exists({
+      follower: currentUserId,
+      following: post.user._id,
+    });
+
     const postWithComments = {
       ...post.toObject(),
       comments,
       likes,
+      isFollowing: Boolean(isFollowing),
+      isOwner: post.user._id.toString() === currentUserId.toString(),
     };
 
     return res.status(200).json({

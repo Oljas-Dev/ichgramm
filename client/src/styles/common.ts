@@ -96,12 +96,12 @@ interface BackdropProps {
 
 // Modal
 export const ModalBackdrop = styled.div<BackdropProps>`
-  display: ${({ $show }) => ($show ? "block" : "none")};
   grid-column: ${({ $column }) => $column};
+  display: ${({ $show }) => ($show ? "block" : "none")};
   font-size: var(--font-size-xs);
 
   background-color: rgba(0, 0, 0, 0.65);
-  padding: 2.9375rem 5.9375rem 0 6.25rem; // 47px 95px 0 100px;
+  padding: 2rem 5.9375rem 0 6.25rem; // 32px 95px 0 100px;
   position: absolute;
   inset: 0;
 

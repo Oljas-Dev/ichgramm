@@ -6,8 +6,12 @@ import {
   clearSearchResults,
   searchUsers,
 } from "../../redux/slices/searchUsersSlice";
-import ProfileRow from "../profileRow";
 import { fetchUrl } from "../../variables/commonVariables";
+import { AvatarImage, ProfileRowContainer } from "../profileRow/styles";
+import { PicturePlaceholder } from "../../styles/common";
+import { Flex } from "antd";
+import { useNavigate } from "react-router-dom";
+import { closeModal } from "../../redux/slices/modalSlice";
 
 // interface SearchTypes {
 //   search: string;
@@ -32,6 +36,7 @@ export default function Search() {
   const [searchQuery, setSearchQuery] = useState("");
 
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   const { results, status, error } = useAppSelector(
     (state) => state.searchUsers,
@@ -62,6 +67,11 @@ export default function Search() {
   function handleSearch(e: React.ChangeEvent<HTMLInputElement>) {
     setSearchQuery(e.target.value);
   }
+
+  function handleUserClick(userId: string | undefined) {
+    dispatch(closeModal());
+    navigate(`/profile/${userId}`);
+  }
   return (
     <MenuPanel titel="Search">
       <SearchContainer>
@@ -81,12 +91,25 @@ export default function Search() {
         )}
 
         {results.map((user) => (
-          <ProfileRow
-            name={user.username}
-            img={`${fetchUrl}${user.avatar}`}
-            userId={user._id}
+          <ProfileRowContainer
             key={user._id}
-          />
+            onClick={() => handleUserClick(user?._id)}
+          >
+            {user?.avatar ? (
+              <AvatarImage
+                src={`${fetchUrl}${user?.avatar}`}
+                alt={`${user?.username}'s name`}
+                width={28}
+              />
+            ) : (
+              <PicturePlaceholder>
+                {user?.username[0].toUpperCase()}
+              </PicturePlaceholder>
+            )}
+            <Flex gap={8}>
+              <p>{user?.username}</p>
+            </Flex>
+          </ProfileRowContainer>
         ))}
       </SearchContainer>
     </MenuPanel>
