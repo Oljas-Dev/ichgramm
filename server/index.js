@@ -53,10 +53,11 @@ app.use("/followers", followUser);
 
 connectToDatabase()
   .then(() => {
-    app.listen(port, () => {
-      console.log(`Server is running on http://localhost:${port}`);
+    app.listen(port, "0.0.0.0", () => {
+      console.log(`Server is running on ${port}`);
     });
   })
   .catch(() => {
+    console.error("Application startup failed:", error);
     process.exit(1);
   });
