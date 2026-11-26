@@ -4,6 +4,7 @@ import {
   type PayloadAction,
 } from "@reduxjs/toolkit";
 import axios from "axios";
+import { fetchUrl } from "../../variables/commonVariables";
 
 export interface User {
   username: string;
@@ -37,15 +38,12 @@ export const getUser = createAsyncThunk<User, string, { rejectValue: string }>(
   "auth/user",
   async (token, thunkApi) => {
     try {
-      const response = await axios.get<User>(
-        `http://localhost:3333/user/current`,
-        {
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+      const response = await axios.get<User>(`${fetchUrl}/user/current`, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
         },
-      );
+      });
 
       setUser(response.data);
 

@@ -15,13 +15,14 @@ import updateUser from "./routes/updateUser.js";
 import likePost from "./routes/likePost.js";
 import searchUsers from "./routes/search.js";
 import followUser from "./routes/follow.js";
+import mediaRouter from "./routes/media.js";
 
 const app = express();
 const port = process.env.PORT || 3333;
 
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: ["http://localhost:5173", "https://ichgramm.vercel.app/"],
     methods: ["GET", "POST", "PUT", "DELETE"],
     allowedHeaders: ["Content-Type", "Authorization"],
   }),
@@ -50,6 +51,7 @@ app.use("/dislike", likePost);
 app.use("/follow", followUser);
 app.use("/unfollow", followUser);
 app.use("/followers", followUser);
+app.use("/media", mediaRouter);
 
 connectToDatabase()
   .then(() => {

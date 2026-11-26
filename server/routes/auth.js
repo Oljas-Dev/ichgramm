@@ -92,6 +92,7 @@ router.post("/register", async (req, res) => {
 
 router.post("/login", async (req, res) => {
   const { identifier, password } = req.body;
+  console.log(identifier);
 
   const userIdentifier = await User.findOne({
     $or: [

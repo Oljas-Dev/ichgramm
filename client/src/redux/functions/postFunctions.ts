@@ -77,7 +77,7 @@ export const deletePost = createAsyncThunk<
   { rejectValue: string }
 >("posts/deletePost", async (postId, { rejectWithValue }) => {
   try {
-    await axios.delete(`http://localhost:3333/posts/${postId}`, {
+    await axios.delete(`${fetchUrl}/posts/${postId}`, {
       method: "DELETE",
       headers: {
         Authorization: `Bearer ${localStorage.getItem("token")}`,
