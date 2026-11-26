@@ -47,18 +47,22 @@ export default function Footer() {
           <Link to="/">Home</Link>
         </li>
         <li>
-          <Link to="#">Search</Link>
+          <Link to="#" onClick={() => dispatch(setModal("search"))}>
+            Search
+          </Link>
         </li>
         <li>
-          <Link to="#">Explore</Link>
+          <Link to="/explore">Explore</Link>
         </li>
         <li>
-          <Link to="#">Messages</Link>
+          <Link to="/messages">Messages</Link>
         </li>
         <li>
-          <Link to="#">Notifications</Link>
+          <Link to="#" onClick={() => dispatch(setModal("notifications"))}>
+            Notifications
+          </Link>
         </li>
-        <li onClick={() => dispatch(setModal("Create"))}>Create</li>
+        <li onClick={() => dispatch(setModal("create"))}>Create</li>
       </StyledList>
       <p>© 2024 ICHgram</p>
     </FooterContainer>
