@@ -51,11 +51,10 @@ app.use("/follow", followUser);
 app.use("/unfollow", followUser);
 app.use("/followers", followUser);
 
-console.log("Starting Ichgramm server...");
-console.log("MONGODB_URI configured:", Boolean(process.env.MONGODB_URI));
-
 connectToDatabase()
   .then(() => {
+    console.log("Database connection established");
+
     app.listen(port, "0.0.0.0", () => {
       console.log(`Server is running on ${port}`);
     });
