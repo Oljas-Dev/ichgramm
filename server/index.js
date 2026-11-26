@@ -57,7 +57,7 @@ connectToDatabase()
       console.log(`Server is running on ${port}`);
     });
   })
-  .catch(() => {
+  .catch((error) => {
     console.error("Application startup failed:", error);
     process.exit(1);
   });
