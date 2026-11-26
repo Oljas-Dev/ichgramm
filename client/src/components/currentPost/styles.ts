@@ -6,19 +6,16 @@ export const CurrentPostContainer = styled.div`
   grid-template-columns: 60% 40%;
   justify-content: center;
 
-  min-height: 60vh;
-  max-height: 80vh;
+  min-height: 60%;
   z-index: 20;
 `;
 
 export const CurrentImageContainer = styled(Flex)`
-  height: 100%;
   background-color: #000;
 `;
 
 export const CurrentPostImg = styled.img`
-  width: 100%;
-  // aspect-ratio: 1/1;
+  width: 80%;
   object-fit: top;
   object-position: center;
 `;

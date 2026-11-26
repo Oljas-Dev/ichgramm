@@ -19,8 +19,8 @@ export default function MenuRowCustom() {
       current?.split("/")[1] === user?._id) ||
     false;
 
-  const avatar = user.avatar;
-  const username = user.username;
+  const avatar = user?.avatar;
+  const username = user?.username;
 
   function handleProfileClick() {
     navigate(`/profile/${user?._id}`);
