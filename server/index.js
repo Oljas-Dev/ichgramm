@@ -51,6 +51,9 @@ app.use("/follow", followUser);
 app.use("/unfollow", followUser);
 app.use("/followers", followUser);
 
+console.log("Starting Ichgramm server...");
+console.log("MONGODB_URI configured:", Boolean(process.env.MONGODB_URI));
+
 connectToDatabase()
   .then(() => {
     app.listen(port, "0.0.0.0", () => {
